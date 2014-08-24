@@ -6,7 +6,8 @@
   "dependencies": {
     "express": "~4.8.5",
     "q": "^1.0.1",
-    "redis": "~0.12.1"
+    "redis": "~0.12.1",
+    "request": "^2.40.0"
   },
   "devDependencies": {
     "karma": "~0.12.22",
