@@ -12,23 +12,37 @@ module.exports = function(app, express, db) {
 	};
 
 	this.getPost = function(req, res) {
+		var id = req.params.id;
+
+		if(!id)
+			res.status(404).end();
+
+		Q(db).ninvoke('hgetall', 'post:' + id).then(function(data) {
+			if(!data)
+				res.status(404).end();
+
+			res.send(data);
+		}, function(err) {
+			console.log(err);
+			res.status(500).end();
+		});
 	};
 
 	this.createPost = function(req, res) {
 		var newPost = {
 			title: req.body.title,
-			body: req.body.body,
+			content: req.body.content,
 			date: new Date(),
 			author: 'NickMass'
 		};
 		
 		Q(db).ninvoke('incr', 'nextPostId').then(function(data) {
-			newPost.Id = data;
+			newPost.id = data;
 			
-			return Q.all([Q(db).ninvoke('lpush', 'posts', newPost.Id),
-						  Q(db).ninvoke('hmset', 'post:' + newPost.Id, newPost)]);
+			return Q.all([Q(db).ninvoke('lpush', 'posts', newPost.id),
+						  Q(db).ninvoke('hmset', 'post:' + newPost.id, newPost)]);
 		}).then(function(data) {
-			res.location('/app/posts/' + newPost.Id);
+			res.location('/api/posts/' + newPost.id);
 			res.status(201).end();
 		});
 	};
