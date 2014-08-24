@@ -5,6 +5,7 @@
   "main": "server.js",
   "dependencies": {
     "express": "~4.8.5",
+    "q": "^1.0.1",
     "redis": "~0.12.1"
   },
   "devDependencies": {
