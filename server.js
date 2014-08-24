@@ -1,5 +1,6 @@
 var express = require('express');
 var app = module.exports = express();
+var bodyParser = require('body-parser');
 var config = require('./config');
 var routes = require('./routes');
 var redis = require('redis');
@@ -9,6 +10,7 @@ var services = {
 	posts : require('./services/postService')(app, express, db) 
 };
 
+app.use(bodyParser.json());
 app.use(express.static('client'));
 routes.setup(app, services)
 

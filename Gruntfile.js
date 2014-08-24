@@ -32,7 +32,7 @@ module.exports = function(grunt) {
 			watch: {
 				watch: {
 					files: '**/*.js',
-					tasks: ['karma:watch:run', 'jasmine_node']
+					tasks: ['jasmine_node', 'karma:watch:run']
 				}
 			}
 	});
