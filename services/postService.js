@@ -48,6 +48,26 @@ module.exports = function(app, express, db) {
 	};
 
 	this.updatePost = function(req, res) {
+		console.log('Called');
+		
+		var id = req.params.id;
+
+		if(!id)
+			res.status(404).end();
+		
+		var updatedPost = {};
+
+		if(req.body.title)
+			updatedPost.title = req.body.title;
+
+		if(req.body.content)
+			updatedPost.content = req.body.content;
+		Q(db).ninvoke('hmset', 'post:' + id, updatedPost).then(function(data) {
+			res.status(200).end();
+		}, function(err) {
+			console.log(err);
+			res.status(500).end();
+		});
 	};
 
 	return this;

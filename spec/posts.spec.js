@@ -31,4 +31,26 @@ describe('Service: Posts', function() {
 			done();
 		});
 	});
+
+	it('should update posts', function(done) {
+		request.post({url: baseUrl + '/api/posts', json: aPost}, function(err, res, body) {
+			expect(res.statusCode).toEqual(201);
+			var postLocation = res.headers.location;
+			request.get(baseUrl + postLocation, function(err, res, body) {
+				expect(body.title).toEqual(aPost.title);
+				var updatedTitle = 'An updated title';
+				var postId = body.id;
+				body.title = updatedTitle;
+				request.put({url: baseUrl + postLocation, json: body}, function(err, res, body) {
+					expect(err).toBeNull();
+					expect(res.statusCode).toEqual(200);
+					request.get(baseUrl + postLocation, function(err, res, body) {
+						expect(body.title).toEqual(updatedTitle);
+						done();
+					});
+				});
+			});
+		});
+	
+	});
 });
