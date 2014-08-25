@@ -1,11 +1,11 @@
 (function () {
-
-	function BlogService () {
+	function BlogService ($http) {
 		this.getPosts = function() {
-			return ['Hello 1', 'Hello 2', 'Hello 3', 'Hello 4'];
+			return $http.get('http://localhost:3000/api/posts').then(function(res) {
+				return res.data;	
+			});
 		};
 	}
 
 	angular.module('app').service('BlogService', BlogService);
-
 })();
