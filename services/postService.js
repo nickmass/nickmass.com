@@ -2,13 +2,24 @@ var Q = require('q');
 
 module.exports = function(app, express, db) {
 	this.getPosts = function(req, res) {
-		var postLimit = req.param.limit || 10;		
+		var postLimit = req.query.limit || 10;
 
-		Q.all([Q.ninvoke(db, 'info'),
-				Q.ninvoke(db, 'get', 'someKey')])
-			.then(function(data) {
+		if(postLimit > 50)
+			postLimit = 50;
+
+		Q(db).ninvoke('lrange', 'posts', 0, postLimit - 1).then(function(data) {
+			if(!data)
+				res.send([]);
+			
+			var postFuncs = data.map(function(postId) {
+				return Q(db).ninvoke('hgetall', 'post:' + postId);
+			});
+			
+			Q.all(postFuncs).then(function(data) {
 				res.send(data);
 			});
+
+		});	
 	};
 
 	this.getPost = function(req, res) {
@@ -48,8 +59,6 @@ module.exports = function(app, express, db) {
 	};
 
 	this.updatePost = function(req, res) {
-		console.log('Called');
-		
 		var id = req.params.id;
 
 		if(!id)

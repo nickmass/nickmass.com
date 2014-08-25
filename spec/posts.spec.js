@@ -31,6 +31,20 @@ describe('Service: Posts', function() {
 			done();
 		});
 	});
+	
+	it('should return a list of posts', function(done) {
+		request.get(baseUrl + '/api/posts', function(err, res, body) {
+			expect(body.length).toBeDefined();
+			done();
+		});
+	});
+
+	it('should limit post lists by limit param', function(done) {
+		request.get(baseUrl + '/api/posts?limit=3', function(err, res, body) {
+			expect(body.length).toEqual(3);
+			done();
+		});
+	});
 
 	it('should update posts', function(done) {
 		request.post({url: baseUrl + '/api/posts', json: aPost}, function(err, res, body) {
