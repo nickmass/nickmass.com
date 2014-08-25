@@ -1,4 +1,8 @@
 (function() {
+	var settings = {
+			appUrl: 'http://nodeblog.nickmass.com'
+	};
+	
 	function config ($routeProvider) {
 		$routeProvider
 		.when('/', {
@@ -7,6 +11,7 @@
 			controllerAs: 'blog'
 		});
 	};
-
+	
+	angular.module('app').constant('AppSettings', settings);
 	angular.module('app').config(config);
 })();
