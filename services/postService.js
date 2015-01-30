@@ -2,24 +2,33 @@ var Q = require('q');
 
 module.exports = function(app, express, db) {
 	this.getPosts = function(req, res) {
-		var postLimit = req.query.limit || 10;
-
+		var postLimit = (req.query.limit || 10) | 0;
+		var postSkip = (req.query.skip || 0) | 0;
+		
 		if(postLimit > 50)
 			postLimit = 50;
 
-		Q(db).ninvoke('lrange', 'posts', 0, postLimit - 1).then(function(data) {
+		Q(db).ninvoke('lrange', 'posts', postSkip, postLimit - 1 + postSkip).then(function(data) {
 			if(!data)
 				res.send([]);
 			
-			var postFuncs = data.map(function(postId) {
-				return Q(db).ninvoke('hgetall', 'post:' + postId);
+
+			var multi = db.multi();
+
+			data.forEach(function(postId) {
+				multi.hgetall('post:' + postId);
 			});
 			
-			Q.all(postFuncs).then(function(data) {
-				res.send(data);
+			return Q(multi).ninvoke('exec');
+		}).then(function(posts) {
+			return [posts, Q(db).ninvoke('llen', 'posts')];
+		}).spread(function(posts, length) {
+			res.send({
+				items:posts,
+				hasMore: length >= postLimit - 1 + postSkip,
+				total: length
 			});
-
-		});	
+		});
 	};
 
 	this.getPost = function(req, res) {
@@ -33,17 +42,14 @@ module.exports = function(app, express, db) {
 				res.status(404).end();
 
 			res.send(data);
-		}, function(err) {
-			console.log(err);
-			res.status(500).end();
-		});
+		}, errorHandler(res));
 	};
 
 	this.createPost = function(req, res) {
 		var newPost = {
 			title: req.body.title,
 			content: req.body.content,
-			date: new Date(),
+			date: new Date().getTime(),
 			author: 'NickMass'
 		};
 		
@@ -71,13 +77,27 @@ module.exports = function(app, express, db) {
 
 		if(req.body.content)
 			updatedPost.content = req.body.content;
-		Q(db).ninvoke('hmset', 'post:' + id, updatedPost).then(function(data) {
-			res.status(200).end();
-		}, function(err) {
+		Q(db).ninvoke('hexists', 'post:' + id, 'id').then(function(data) {
+			if(data) {
+				Q(db).ninvoke('hmset', 'post:' + id, updatedPost).then(function(data) {
+					res.status(200).end();
+				}, function(err) {
+					console.log(err);
+					res.status(500).end();
+				});
+			} else {
+				createPost(req, res);
+			}
+		}, errorHandler(res));
+	};
+
+	function errorHandler(res)
+	{
+		return function(err) {
 			console.log(err);
 			res.status(500).end();
-		});
-	};
+		};
+	}
 
 	return this;
 };

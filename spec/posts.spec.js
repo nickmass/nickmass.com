@@ -9,9 +9,10 @@ var aPost = {
 
 describe('Service: Posts', function() {
 	it('should be able to create posts', function(done) {
+		
 		request.post({url: baseUrl + '/api/posts', json: aPost}, function (err, res, body) {
-			expect(res.statusCode).toEqual(201);
-			request.get(baseUrl + res.headers.location, function (err, res, body) {
+				expect(res.statusCode).toEqual(201);
+				request.get(baseUrl + res.headers.location, function (err, res, body) {
 				expect(body.title).toEqual(aPost.title);
 				done();
 			});
@@ -34,20 +35,22 @@ describe('Service: Posts', function() {
 	
 	it('should return a list of posts', function(done) {
 		request.get(baseUrl + '/api/posts', function(err, res, body) {
-			expect(body.length).toBeDefined();
+			expect(body.items.length).toBeDefined();
+			expect(body.total).toBeDefined();
+			expect(body.hasMore).toBeDefined();
 			done();
 		});
 	});
 
 	it('should limit post lists by limit param', function(done) {
 		request.get(baseUrl + '/api/posts?limit=3', function(err, res, body) {
-			expect(body.length).toEqual(3);
+			expect(body.items.length).toEqual(3);
 			done();
 		});
 	});
 
 	it('should update posts', function(done) {
-		request.post({url: baseUrl + '/api/posts', json: aPost}, function(err, res, body) {
+			request.post({url: baseUrl + '/api/posts', json: aPost}, function(err, res, body) {
 			expect(res.statusCode).toEqual(201);
 			var postLocation = res.headers.location;
 			request.get(baseUrl + postLocation, function(err, res, body) {
