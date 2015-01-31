@@ -2,6 +2,7 @@ var AppDispatcher = require('../dispatcher/AppDispatcher');
 var BlogWebAPIUtil = require('../utils/BlogWebAPIUtil');
 var EventEmitter = require('events').EventEmitter;
 var assign = require('object-assign');
+var marked = require('marked');
 
 var _posts = [];
 var _pageSize = 0;
@@ -29,6 +30,10 @@ var PostStore = assign({}, EventEmitter.prototype, {
 
 	total: function() {
 		return _total;
+	},
+	
+	parseMarkdownPost: function (content) {
+		return marked(content);
 	},
 
 	emitChange: function() {

@@ -1,11 +1,13 @@
 var React = require('react');
 var BlogViewActions = require('../actions/BlogViewActions');
+var PostStore = require('../stores/PostStore');
 
 var PostComposer = React.createClass({
 	getInitialState: function() {
 		return {title: '',
 				author: '',
-				content: ''}
+				content: '',
+				htmlContent: ''}
 	},
 		
 	render: function() {
@@ -18,6 +20,7 @@ var PostComposer = React.createClass({
 					<label>Content</label>
 					<textarea className="u-full-width" value={this.state.content} onChange={this._onChangeContent}/><br/>
 					<input className="button-primary" type="button" value="Submit" onClick={this._onSubmitPost}/>
+					<div dangerouslySetInnerHTML={{ __html: this.state.htmlContent}} />
 				</div>
 			   );
 	},
@@ -31,7 +34,7 @@ var PostComposer = React.createClass({
 	},
 
 	_onChangeContent: function(event) {
-		this.setState({content: event.target.value});
+		this.setState({content: event.target.value, htmlContent: PostStore.parseMarkdownPost(event.target.value)});
 	},
 
 	_onSubmitPost: function() {
