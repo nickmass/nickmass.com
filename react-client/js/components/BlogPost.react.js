@@ -12,9 +12,10 @@ var BlogPost = React.createClass({
 
 		return (
 			<article>
-				<h2>{post.title}</h2>
+				<h4>{post.title}</h4>
 				<small>{post.author} on {post.date}</small>
 				<p>{post.content}</p>
+				<hr/>
 			</article>
 		);
 	}

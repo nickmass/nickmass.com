@@ -11,7 +11,7 @@ var services = {
 };
 
 app.use(bodyParser.json());
-app.use(express.static('react-client'));
+app.use(express.static('dist'));
 routes.setup(app, services)
 
 app.listen(3000);

@@ -29,7 +29,9 @@
     "browserify": "~8.1.1",
     "gulp-nodemon": "~1.0.5",
     "gulp-jasmine": "~2.0.0",
-    "watchify": "~2.2.1"
+    "watchify": "~2.2.1",
+    "gulp-minify-css": "~0.4.3",
+    "gulp-concat": "~2.4.3"
   },
   "author": "Nick Massey <nickmass@nickmass.com> (http://nickmass.com)",
   "license": "MIT"

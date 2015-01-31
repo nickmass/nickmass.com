@@ -11,10 +11,13 @@ var PostComposer = React.createClass({
 	render: function() {
 		return (
 				<div>
-					<input type="text" value={this.state.title} onChange={this._onChangeTitle}/><br/>
-					<input type="text" value={this.state.author} onChange={this._onChangeAuthor}/><br/>
-					<textarea value={this.state.content} onChange={this._onChangeContent}/><br/>
-					<input type="button" onClick={this._onSubmitPost}/>
+					<label>Title</label>
+					<input className="u-full-width" type="text" value={this.state.title} onChange={this._onChangeTitle}/>
+					<label>Date</label>
+					<input className="u-full-width" type="text" value={this.state.author} onChange={this._onChangeAuthor}/><br/>
+					<label>Content</label>
+					<textarea className="u-full-width" value={this.state.content} onChange={this._onChangeContent}/><br/>
+					<input className="button-primary" type="button" value="Submit" onClick={this._onSubmitPost}/>
 				</div>
 			   );
 	},

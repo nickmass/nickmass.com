@@ -9,7 +9,6 @@ var aPost = {
 
 describe('Service: Posts', function() {
 	it('should be able to create posts', function(done) {
-		
 		request.post({url: baseUrl + '/api/posts', json: aPost}, function (err, res, body) {
 				expect(res.statusCode).toEqual(201);
 				request.get(baseUrl + res.headers.location, function (err, res, body) {
