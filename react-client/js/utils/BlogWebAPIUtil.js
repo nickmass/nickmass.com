@@ -8,14 +8,18 @@ var client = rest.wrap(mime, {mime: 'application/json'});
 var baseURL = '/api';
 module.exports = {
 	getAllPosts: function (page, pageSize) {
-		client({ path: baseURL + '/posts', params: {skip: (page-1) * pageSize, limit: pageSize}}).then(function(data){
-			BlogServerActions.receiveAllPosts(page, pageSize, data.entity.items, data.entity.hasMore, data.entity.total);
-		});
+		getAllPosts(page, pageSize);
 	},
 
-	createPost: function(post) {
+	createPost: function(post, updateParams) {
 		client({ path: baseURL + '/posts', method: 'POST', entity: post}).then(function(data) {
-			
+			getAllPosts(updateParams.currentPage, updateParams.pageSize);
 		});
 	}
 };
+
+function getAllPosts(page, pageSize) {
+	client({ path: baseURL + '/posts', params: {skip: (page-1) * pageSize, limit: pageSize}}).then(function(data){
+		BlogServerActions.receiveAllPosts(page, pageSize, data.entity.items, data.entity.hasMore, data.entity.total);
+	});
+}

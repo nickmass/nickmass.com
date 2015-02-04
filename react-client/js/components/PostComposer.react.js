@@ -39,7 +39,7 @@ var PostComposer = React.createClass({
 
 	_onSubmitPost: function() {
 		BlogViewActions.createPost(this.state);
-		this.setState({title: '', author: '', content: ''});
+		this.setState({title: '', author: '', content: '', htmlContent: ''});
 	}
 
 });

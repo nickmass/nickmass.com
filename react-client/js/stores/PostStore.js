@@ -1,5 +1,4 @@
 var AppDispatcher = require('../dispatcher/AppDispatcher');
-var BlogWebAPIUtil = require('../utils/BlogWebAPIUtil');
 var EventEmitter = require('events').EventEmitter;
 var assign = require('object-assign');
 var marked = require('marked');
@@ -35,7 +34,15 @@ var PostStore = assign({}, EventEmitter.prototype, {
 	parseMarkdownPost: function (content) {
 		return marked(content);
 	},
+	
+	formatPost: function(post) {
+		post.content = PostStore.parseMarkdownPost(post.content);
+		var d = new Date(Number(post.date) || 0);
+		post.date = d.toLocaleDateString() + ' ' + d.toLocaleTimeString();
 
+		return post;
+	},
+		
 	emitChange: function() {
 		this.emit('change');
 	},
@@ -55,13 +62,10 @@ AppDispatcher.register(function(payload) {
 		case 'RECEIVE_ALL_POSTS':
 			_currentPage = action.currentPage;
 			_pageSize = action.pageSize;
-			_posts = action.posts;
+			_posts = action.posts.map(PostStore.formatPost);
 			_hasMore = action.hasMore;
 			_total = action.total;
 			PostStore.emitChange();
-			break;
-		case 'UPDATE_POSTS':
-			BlogWebAPIUtil.getAllPosts(_currentPage, _pageSize);
 			break;
 	}
 });

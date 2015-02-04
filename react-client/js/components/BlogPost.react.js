@@ -1,5 +1,6 @@
 var React = require('react');
 var ReactPropTypes = React.PropTypes;
+var PostStore = require('../stores/PostStore');
 
 var BlogPost = React.createClass({
 
@@ -14,7 +15,7 @@ var BlogPost = React.createClass({
 			<article>
 				<h4>{post.title}</h4>
 				<small>{post.author} on {post.date}</small>
-				<p>{post.content}</p>
+				<div dangerouslySetInnerHTML={{__html: post.content}}/>
 				<hr/>
 			</article>
 		);

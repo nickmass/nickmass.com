@@ -16,9 +16,6 @@ module.exports = {
 	},
 
 	createPost: function(post) {
-		BlogWebAPIUtil.createPost(post);
-		AppDispatcher.handleViewAction({
-			type: 'UPDATE_POSTS'
-		});
+		BlogWebAPIUtil.createPost(post, { currentPage: PostStore.getCurrentPage(), pageSize: PostStore.getPageSize()});
 	}
 };
