@@ -2,3 +2,4 @@ node_modules/*
 client/libs/*
 react-client/js/bundle*
 dist/*
+keys.js

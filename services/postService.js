@@ -1,6 +1,8 @@
 var Q = require('q');
 
 module.exports = function(app, express, db) {
+	var UserService = require('./userService')(db);
+
 	this.getPosts = function(req, res) {
 		var postLimit = (req.query.limit || 10) | 0;
 		var postSkip = (req.query.skip || 0) | 0;
@@ -21,7 +23,27 @@ module.exports = function(app, express, db) {
 			
 			return Q(multi).ninvoke('exec');
 		}).then(function(posts) {
-			return [posts, Q(db).ninvoke('llen', 'posts')];
+			var allAuthorIds = posts.map(function(post) {
+					return post.authorId
+			}).filter(function(id, index, self) {
+					return self.indexOf(id) === index && Number(id);
+			});
+
+			return Q.all([UserService.getMultipleUsers(allAuthorIds).then(function (allAuthors) {
+				posts = posts.map(function(post) {
+					var match = allAuthors.filter(function(author) {
+						return author.id === post.authorId;
+					});
+
+					if(match[0]) {
+						post.author = match[0].name;
+						post.authorEmail = match[0].email;
+					}
+				
+					return post;
+				});
+				return posts
+			}), Q(db).ninvoke('llen', 'posts')]);
 		}).spread(function(posts, length) {
 			res.send({
 				items:posts,
@@ -46,11 +68,16 @@ module.exports = function(app, express, db) {
 	};
 
 	this.createPost = function(req, res) {
+		if(!req.user) {
+			res.status(403).end();
+			return;
+		}
+		
 		var newPost = {
 			title: req.body.title,
 			content: req.body.content,
 			date: new Date().getTime(),
-			author: 'NickMass'
+			authorId: req.user.id
 		};
 		
 		Q(db).ninvoke('incr', 'nextPostId').then(function(data) {
