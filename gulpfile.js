@@ -23,7 +23,7 @@ var bundle = function() {
 		.pipe(source('bundle.js'))
 		.pipe(buffer())
 		.pipe(sourcemaps.init({loadMaps: true}))
-		.pipe(uglify())
+	//	.pipe(uglify())
 		.pipe(sourcemaps.write('./'))
 		.pipe(gulp.dest('./dist/js/'));
 };
@@ -35,7 +35,7 @@ bundler.on('update', bundle);
 bundler.on('log', function(log) { console.log('[watchify] ' + log); });
 
 gulp.task('css', function() {
-	gulp.src('./react-client/css/*.css')
+	gulp.src(['./react-client/css/normalize.css', './react-client/css/skeleton.css', './react-client/css/site.css'])
 		.pipe(concat('bundle.css'))
 		.pipe(minifyCSS())
 		.pipe(gulp.dest('./dist/css/'));

@@ -1,0 +1,85 @@
+html {
+	font-size: 14px;
+}
+body {
+	font-family: 'Josefin Sans', sans-serif;
+}
+code,kbd,pre,samp {
+	font-family: 'Source Code Pro', monospace;
+}
+.container {
+	max-width: 800px;
+}
+#user-bar {
+	padding: 0 15px;
+	border-bottom: 1px solid #e1e1e1;
+}
+
+#user-bar button {
+	margin: 8px;
+}
+
+#user-bar .user-greeting {
+	font-size: .8em;
+	margin: 8px;
+	display: inline-block;
+	line-height: 38px;
+	vertical-align: -2px;
+}
+
+#header {
+	position: relative;
+	height: 300px;
+	border-bottom: 1px solid #e1e1e1; 
+	margin-bottom: 20px;
+}
+
+#header h1 {
+	margin: 1em 0 .5em 0;
+	text-align: center;
+}
+
+#header h4 {
+	margin: 0;
+	text-align: center
+}
+
+#header .social-container {
+	background: #fff;
+	position: absolute;
+	bottom: 0;
+	margin: 0 auto;
+	border-top: 1px solid #e1e1e1;
+	width: 100%
+}
+
+#header .social-links {
+	margin: 0 auto;
+	text-align: center;
+}
+
+#header .social-links li {
+	display: inline-block;
+	padding: 9px;
+	line-height: 38px;
+	width: 150px;
+	margin: 0;
+}
+
+.post {
+
+}
+
+.post h6 {
+	font-size: 1.2rem;
+	margin: 0;
+	font-weight: 700;
+	text-transform: uppercase;
+}
+
+.post small {
+	display: inline-block;
+	margin-bottom: 2rem;
+	font-weight: 300;
+	font-size: .9rem;
+}

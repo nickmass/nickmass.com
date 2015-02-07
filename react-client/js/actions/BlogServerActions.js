@@ -13,4 +13,11 @@ module.exports = {
 			total: total
 		});
 	},
+
+	receiveCurrentUser: function(currentUser) {
+		AppDispatcher.handleServerAction({
+			type: 'RECEIVE_CURRENT_USER',
+			currentUser: currentUser
+		});
+	}
 }

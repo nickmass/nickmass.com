@@ -12,10 +12,10 @@ var BlogPost = React.createClass({
 		var post = this.props.post;
 
 		return (
-			<article>
-				<h4>{post.title}</h4>
-				<small>{post.author} on {post.date}</small>
-				<div dangerouslySetInnerHTML={{__html: post.content}}/>
+			<article className="post" itemscope itemtype="http://schema.org/BlogPosting">
+				<h6 itemprop="name">{post.title}</h6>
+				<small><span itemprop="author">{post.author}</span> on <span itemprop="publishedDate">{post.date}</span></small>
+				<div dangerouslySetInnerHTML={{__html: post.content}} itemprop="articleBody"/>
 				<hr/>
 			</article>
 		);

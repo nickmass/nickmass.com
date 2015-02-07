@@ -15,6 +15,15 @@ module.exports = {
 		client({ path: baseURL + '/posts', method: 'POST', entity: post}).then(function(data) {
 			getAllPosts(updateParams.currentPage, updateParams.pageSize);
 		});
+	},
+	
+	getCurrentUser: function() {
+		client({ path: '/auth/current'}).then(function(data) {
+			var currentUser = false;
+			if(data.entity)
+				currentUser = data.entity;
+			BlogServerActions.receiveCurrentUser(currentUser);
+		});
 	}
 };
 

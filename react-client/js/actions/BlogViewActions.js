@@ -17,5 +17,14 @@ module.exports = {
 
 	createPost: function(post) {
 		BlogWebAPIUtil.createPost(post, { currentPage: PostStore.getCurrentPage(), pageSize: PostStore.getPageSize()});
+		AppDispatcher.handleViewAction({
+			type: 'HIDE_COMPOSE_POST'
+		});
+	},
+
+	composePost: function() {
+		AppDispatcher.handleViewAction({
+			type: 'COMPOSE_POST'
+		});
 	}
 };
