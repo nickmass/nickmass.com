@@ -66,10 +66,6 @@ code,kbd,pre,samp {
 	margin: 0;
 }
 
-.post {
-
-}
-
 .post h6 {
 	font-size: 1.2rem;
 	margin: 0;
@@ -82,4 +78,45 @@ code,kbd,pre,samp {
 	margin-bottom: 2rem;
 	font-weight: 300;
 	font-size: .9rem;
+}
+
+#post-composer {
+	background: #fff;
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 2;
+	width: 100%;
+	height: 100%;
+	padding: 12px;
+}
+
+#post-composer h4 {
+	text-align: center;
+}
+
+#post-entry {
+	position: relative;
+	height: 50%;
+	float: left;
+	width: 50%;
+}
+
+#post-entry button {
+	margin: 0 0 8px 16px; 
+	float: right;
+}
+
+#post-entry textarea {
+	height: 100%;
+	box-sizing: border-box;
+}
+
+#post-preview {
+	float: left;
+	width: calc(50% - 16px);
+	max-width: 800px;
+	margin: 8px;
+	height: 100%;
+	overflow: auto;
 }

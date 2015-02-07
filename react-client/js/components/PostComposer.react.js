@@ -10,14 +10,28 @@ var PostComposer = React.createClass({
 	},
 		
 	render: function() {
+		var preview;
+		if(this.state.content.length > 0) {
+			preview = (
+					<div id="post-preview" className="post">
+					<h6>{this.state.title}</h6>
+					<small>Post Preview</small>
+					<div dangerouslySetInnerHTML={{ __html: this.state.htmlContent}} />
+					</div>
+					);
+		}
 		return (
-				<div>
+				<div id="post-composer">
+					<h4>Create Post</h4>
+					<div id="post-entry">
 					<label>Title</label>
 					<input className="u-full-width" type="text" value={this.state.title} onChange={this._onChangeTitle}/>
 					<label>Content</label>
 					<textarea className="u-full-width" value={this.state.content} onChange={this._onChangeContent}/><br/>
-					<input className="button-primary" type="button" value="Submit" onClick={this._onSubmitPost}/>
-					<div dangerouslySetInnerHTML={{ __html: this.state.htmlContent}} />
+					<button onClick={this._onCancel}>Cancel</button>
+					<button className="button-primary" onClick={this._onSubmitPost}>Submit</button>
+					</div>
+					{preview}
 				</div>
 			   );
 	},
@@ -33,8 +47,11 @@ var PostComposer = React.createClass({
 	_onSubmitPost: function() {
 		BlogViewActions.createPost(this.state);
 		this.setState({title: '', content: '', htmlContent: ''});
-	}
+	},
 
+	_onCancel: function() {
+		BlogViewActions.hideComposePost();
+	}
 });
 
 module.exports = PostComposer;

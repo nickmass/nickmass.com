@@ -21,6 +21,12 @@ module.exports = {
 			type: 'HIDE_COMPOSE_POST'
 		});
 	},
+	
+	hideComposePost: function () {
+		AppDispatcher.handleViewAction({
+			type: 'HIDE_COMPOSE_POST'
+		});
+	},
 
 	composePost: function() {
 		AppDispatcher.handleViewAction({
