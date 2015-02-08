@@ -9,8 +9,6 @@ var _currentPage = 0;
 var _hasMore = false;
 var _total = 0;
 
-var _composePost = false;
-
 var PostStore = assign({}, EventEmitter.prototype, {
 	getAll: function() {
 		return _posts;
@@ -22,10 +20,6 @@ var PostStore = assign({}, EventEmitter.prototype, {
 
 	getPageSize: function() {
 		return _pageSize;
-	},
-
-	getComposePost: function() {
-		return _composePost;
 	},
 
 	hasMore: function() {
@@ -58,14 +52,6 @@ PostStore.dispatchToken = AppDispatcher.register(function(payload) {
 			_posts = action.posts.map(PostFormatter);
 			_hasMore = action.hasMore;
 			_total = action.total;
-			PostStore.emitChange();
-			break;
-		case 'COMPOSE_POST':
-			_composePost = true;
-			PostStore.emitChange();
-			break;
-		case 'HIDE_COMPOSE_POST':
-			_composePost = false;
 			PostStore.emitChange();
 			break;
 		default:
