@@ -23,7 +23,7 @@ var bundle = function() {
 		.pipe(source('bundle.js'))
 		.pipe(buffer())
 		.pipe(sourcemaps.init({loadMaps: true}))
-	//	.pipe(uglify())
+		.pipe(uglify())
 		.pipe(sourcemaps.write('./'))
 		.pipe(gulp.dest('./dist/js/'));
 };

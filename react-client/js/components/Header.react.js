@@ -86,26 +86,31 @@ var Header = React.createClass({
 		if(!soft);
 			a.joined = b.id;
 	}
-
+	var colors = [
+		'#fff',
+		'#f1f1f1',
+		'#bbb',
+		'#bbb'
+			];
 	function draw(timestamp) {
 		if(stop) {
 			init();
 			return;
 		}
-		ctx.fillStyle = '#fff';
+		ctx.fillStyle = colors[0];
 		ctx.fillRect(0,0,width, height);
-		ctx.fillStyle = '#a1a1a1';
+		ctx.fillStyle = colors[2];
 		for(var i = 0; i < pointCount; i++) {
 			points[i].joined = false;
 			var sortedArr = closestPoints(points[i]);
-			ctx.strokeStyle = '#d1d1d1';
+			ctx.strokeStyle = colors[3];
 			joinPoints(points[i], sortedArr[1]);
-			ctx.strokeStyle = '#f1f1f1';
+			ctx.strokeStyle = colors[1];
 			joinPoints(points[i], sortedArr[2], true);
 			joinPoints(points[i], sortedArr[3], true);
 			joinPoints(points[i], sortedArr[4], true);
 		}
-		ctx.strokeStyle = '#d1d1d1';
+		ctx.strokeStyle = colors[3];
 		for(var i = 0; i < pointCount; i++) {
 			ctx.beginPath();
 			ctx.arc(points[i].x, points[i].y, points[i].radius, 0, Math.PI*2);
