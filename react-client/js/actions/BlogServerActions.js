@@ -19,5 +19,12 @@ module.exports = {
 			type: 'RECEIVE_CURRENT_USER',
 			currentUser: currentUser
 		});
+	},
+
+	editPost: function(post) {
+		AppDispatcher.handleServerAction({
+			type: 'EDIT_POST',
+			post: post
+		});
 	}
 }

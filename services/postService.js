@@ -99,9 +99,6 @@ module.exports = function(app, express, db) {
 
 		var id = req.params.id;
 
-		if(!id)
-			res.status(404).end();
-		
 		var updatedPost = {};
 
 		if(req.body.title)

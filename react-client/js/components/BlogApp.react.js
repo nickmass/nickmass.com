@@ -2,6 +2,7 @@ var React = require('react');
 var BlogPost = require('./BlogPost.react');
 var PostComposer = require('./PostComposer.react');
 var PostStore = require('../stores/PostStore');
+var PostComposerStore = require('../stores/PostComposerStore');
 var UserStore = require('../stores/UserStore');
 var BlogViewActions = require('../actions/BlogViewActions');
 var UserBar = require('./UserBar.react');
@@ -13,7 +14,7 @@ function getBlogState() {
 		currentPage: PostStore.getCurrentPage(),
 		pageSize: PostStore.getPageSize(),
 		hasMore: PostStore.hasMore(),
-		composePost: PostStore.getComposePost(),
+		composePost: PostComposerStore.getComposePost(),
 		currentUser: UserStore.getCurrentUser()
 	};
 }
@@ -26,11 +27,13 @@ var BlogApp = React.createClass({
 	componentDidMount: function() {
 		PostStore.addChangeListener(this._onChange);
 		UserStore.addChangeListener(this._onChange);
+		PostComposerStore.addChangeListener(this._onChange);
 	},
 
 	componentWillUnmount: function() {
 		PostStore.removeChangeListener(this._onChange);
 		UserStore.removeChangeListener(this._onChange);
+		PostComposerStore.removeChangeListener(this._onChange);
 	},
 
 	render: function() {

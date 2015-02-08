@@ -9,8 +9,6 @@ function setup(app, services) {
 		res.redirect('/');
 	});
 	app.get('/auth/current', function (req, res) {
-		res.send({name: 'Nick Massey', id: 1});
-		return;
 		if(!req.user) {
 			res.status(404).end();
 		}

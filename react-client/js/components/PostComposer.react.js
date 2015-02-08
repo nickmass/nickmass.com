@@ -1,14 +1,31 @@
 var React = require('react');
 var BlogViewActions = require('../actions/BlogViewActions');
 var PostFormatter = require('../utils/PostFormatter');
+var PostComposerStore = require('../stores/PostComposerStore');
+
+function getComposerState() {
+	var post = PostComposerStore.getPost();
+	return {
+			id: post.id,
+			title: post.title,
+			content: post.content,
+			htmlContent: PostFormatter.formatContent(post.content)
+	};
+}
 
 var PostComposer = React.createClass({
 	getInitialState: function() {
-		return {title: '',
-				content: '',
-				htmlContent: ''}
+		return getComposerState();
 	},
-		
+	
+	componentDidMount: function() {
+		PostComposerStore.addChangeListener(this._onChange);
+	},
+
+	componentWillUnmount: function() {
+		PostComposerStore.removeChangeListener(this._onChange);
+	},
+	
 	render: function() {
 		var preview;
 		if(this.state.content.length > 0) {
@@ -35,6 +52,9 @@ var PostComposer = React.createClass({
 				</div>
 			   );
 	},
+	_onChange: function() {
+		this.setState(getComposerState());	
+	},
 
 	_onChangeTitle: function(event) {
 		this.setState({title: event.target.value});
@@ -46,7 +66,7 @@ var PostComposer = React.createClass({
 
 	_onSubmitPost: function() {
 		BlogViewActions.createPost(this.state);
-		this.setState({title: '', content: '', htmlContent: ''});
+		this.setState({id: null, title: '', content: '', htmlContent: ''});
 	},
 
 	_onCancel: function() {

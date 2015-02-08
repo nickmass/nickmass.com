@@ -27,9 +27,7 @@ module.exports = {
 	},
 
 	editPost: function(post) {
-		AppDispatcher.handleViewAction({
-			type: 'EDIT_POST'
-		});
+		BlogWebAPIUtil.editPost(post);
 	},
 	
 	hideComposePost: function () {

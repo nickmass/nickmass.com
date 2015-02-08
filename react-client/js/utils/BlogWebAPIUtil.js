@@ -7,12 +7,20 @@ var client = rest.wrap(mime, {mime: 'application/json'});
 
 var baseURL = '/api';
 module.exports = {
+	editPost: function(post) {
+		client({ path: baseURL + '/posts/' + post.id, method: 'GET' }).then(function(data) {
+			BlogServerActions.editPost(data.entity);
+		});
+	},
+
 	getAllPosts: function (page, pageSize) {
 		getAllPosts(page, pageSize);
 	},
 
 	createPost: function(post, updateParams) {
-		client({ path: baseURL + '/posts', method: 'POST', entity: post}).then(function(data) {
+		var id = post.id == null ? '' : '/' + post.id;
+		var method = post.id == null ? 'POST' : 'PUT';
+		client({ path: baseURL + '/posts' + id, method: method, entity: post}).then(function(data) {
 			getAllPosts(updateParams.currentPage, updateParams.pageSize);
 		});
 	},
