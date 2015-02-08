@@ -92,6 +92,11 @@ module.exports = function(app, express, db) {
 	};
 
 	this.updatePost = function(req, res) {
+		if(!req.user) {
+			res.status(403).end();
+			return;
+		}
+
 		var id = req.params.id;
 
 		if(!id)
@@ -116,6 +121,30 @@ module.exports = function(app, express, db) {
 				createPost(req, res);
 			}
 		}, errorHandler(res));
+	};
+	
+	this.deletePost = function(req, res) {
+		if(!req.user) {
+			res.status(403).end();
+			return;
+		}
+
+		var id = req.params.id;
+		if(!id) {
+			res.status(404).end();
+			return;;
+		}
+
+		Q(db).ninvoke('hgetall', 'post:' + id).then(function(data) {
+			if(!data) {
+				res.status(404).end();
+				return;
+			}
+			return Q(db).ninvoke('lrem', 'posts', -1, id);
+		}).then(function() {
+			res.status(200).end();
+			return;
+		});
 	};
 
 	function errorHandler(res)

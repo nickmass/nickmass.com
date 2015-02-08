@@ -3,12 +3,14 @@ function setup(app, services) {
 	app.get('/api/posts/:id', services.posts.getPost);
 	app.post('/api/posts', services.posts.createPost);
 	app.put('/api/posts/:id', services.posts.updatePost);
-	
+	app.delete('/api/posts/:id', services.posts.deletePost);	
 	app.get('/auth/logout', function(req, res) {
 		req.logout();
 		res.redirect('/');
 	});
 	app.get('/auth/current', function (req, res) {
+		res.send({name: 'Nick Massey', id: 1});
+		return;
 		if(!req.user) {
 			res.status(404).end();
 		}

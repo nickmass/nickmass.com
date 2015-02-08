@@ -45,15 +45,15 @@ var BlogApp = React.createClass({
 		var postComposer;
 		if(this.state.composePost)
 			postComposer = <PostComposer />;
-
+		var user = this.state.currentUser;
 		return (
 			<div>
-			<UserBar user={this.state.currentUser} />
+			<UserBar user={user} />
 			<Header />
 			<div className="container">
 				{postComposer}
 				{this.state.allPosts.map(function(post){
-					return <BlogPost key={post.id} post={post} />;
+					return <BlogPost key={post.id} post={post} user={user} />;
 				})}
 				{pager}
 			</div>

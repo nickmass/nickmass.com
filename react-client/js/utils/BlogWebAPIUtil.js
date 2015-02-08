@@ -17,6 +17,12 @@ module.exports = {
 		});
 	},
 	
+	deletePost: function(post, updateParams) {
+		client({ path: baseURL + '/posts/' + post.id, method: 'DELETE'}).then(function(data) {
+			getAllPosts(updateParams.currentPage, updateParams.pageSize);
+		});
+	},
+	
 	getCurrentUser: function() {
 		client({ path: '/auth/current'}).then(function(data) {
 			var currentUser = false;

@@ -22,6 +22,16 @@ module.exports = {
 		});
 	},
 	
+	deletePost: function(post) {
+		BlogWebAPIUtil.deletePost(post, {currentPage: PostStore.getCurrentPage(), pageSize: PostStore.getPageSize()});
+	},
+
+	editPost: function(post) {
+		AppDispatcher.handleViewAction({
+			type: 'EDIT_POST'
+		});
+	},
+	
 	hideComposePost: function () {
 		AppDispatcher.handleViewAction({
 			type: 'HIDE_COMPOSE_POST'
