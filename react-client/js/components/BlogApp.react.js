@@ -36,18 +36,17 @@ var BlogApp = React.createClass({
 	render: function() {
 		var pager;
 		if(this.state.currentPage == 1 && this.state.hasMore)
-			pager = <div><span onClick={this._nextPage}>Next</span></div>;
+			pager = <div><button className="u-pull-right" onClick={this._nextPage}>Next</button></div>;
 		else if(this.state.hasMore)
-			pager = <div><span onClick={this._prevPage}>Prev</span><span onClick={this._nextPage}>Next</span></div>;
+			pager = <div><button className="u-pull-left" onClick={this._prevPage}>Prev</button><button className="u-pull-right" onClick={this._nextPage}>Next</button></div>;
 		else	
-			pager = <div><span onClick={this._prevPage}>Prev</span></div>;
+			pager = <div><button className="u-pull-left" onClick={this._prevPage}>Prev</button></div>;
 
 		var postComposer;
 		if(this.state.composePost)
 			postComposer = <PostComposer />;
 
 		return (
-
 			<div>
 			<UserBar user={this.state.currentUser} />
 			<Header />

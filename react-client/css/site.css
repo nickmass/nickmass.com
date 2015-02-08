@@ -34,18 +34,18 @@ code,kbd,pre,samp {
 	margin-bottom: 20px;
 }
 
-#header h1 {
+#header > h1 {
 	padding-top: 1em;
 	margin-bottom: .25em;
 	text-align: center;
 }
 
-#header h4 {
+#header > h4 {
 	margin: 0;
 	text-align: center
 }
 
-#header .social-container {
+#header > .social-container {
 	background: #fff;
 	position: absolute;
 	bottom: 0;
@@ -60,12 +60,26 @@ code,kbd,pre,samp {
 	text-align: center;
 }
 
-#header .social-links li {
+#header .social-links > li {
 	display: inline-block;
-	padding: 9px;
-	line-height: 38px;
-	width: 150px;
+	margin: 0 1px;
+}
+
+#header .social-links > li:hover {
+	border-collapse: collapse;
 	margin: 0;
+	border-right: 1px solid #e1e1e1;
+	border-left: 1px solid #e1e1e1;
+}
+
+#header .social-links > li > a {
+	display:inline-block;
+	width: 150px;
+	height: 56px;
+	line-height: 56px;
+	text-decoration: none;
+	color: #000;
+	vertical-align: middle;
 }
 
 #header-canvas {
@@ -75,14 +89,14 @@ code,kbd,pre,samp {
 	z-index: -1;
 }
 
-.post h6 {
+.post > h6 {
 	font-size: 1.2rem;
 	margin: 0;
 	font-weight: 700;
 	text-transform: uppercase;
 }
 
-.post small {
+.post > small {
 	display: inline-block;
 	margin-bottom: 2rem;
 	font-weight: 300;
@@ -111,12 +125,12 @@ code,kbd,pre,samp {
 	width: 50%;
 }
 
-#post-entry button {
+#post-entry > button {
 	margin: 0 0 8px 16px; 
 	float: right;
 }
 
-#post-entry textarea {
+#post-entry > textarea {
 	height: 100%;
 	box-sizing: border-box;
 }

@@ -9,9 +9,9 @@ var Header = React.createClass({
 				<h4>Some short subtitle</h4>
 				<div className="social-container">
 				<ul className="social-links">
-				<li>Twitter</li>
-				<li>Github</li>
-				<li>BitBucket</li>
+				<li><a href="http://twitter.com/nickmass"><i className="fa fa-twitter"></i> Twitter</a></li>
+				<li><a href="http://github.com/nickmass"><i className="fa fa-github"></i> Github</a></li>
+				<li><a href="http://bitbucket.org/nickmass"><i className="fa fa-bitbucket"></i> Bitbucket</a></li>
 				</ul>
 				</div>
 				</div>
