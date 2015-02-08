@@ -2,7 +2,10 @@ var React = require('react');
 var ReactPropTypes = React.PropTypes;
 var BlogViewActions = require('../actions/BlogViewActions');
 
+var Router = require('react-router');
+
 var BlogPost = React.createClass({
+	mixins: [Router.Navigation],
 
 	propTypes: {
 		post: ReactPropTypes.object.isRequired
@@ -33,7 +36,7 @@ var BlogPost = React.createClass({
 	},
 
 	_onEdit: function() {
-		BlogViewActions.editPost(this.props.post);	
+		this.transitionTo('edit-post', {postId: this.props.post.id});
 	},
 
 	_onDelete: function() {

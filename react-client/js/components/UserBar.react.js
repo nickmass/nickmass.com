@@ -2,7 +2,11 @@ var React = require('react');
 var ReactPropTypes = React.PropTypes;
 var BlogViewActions = require('../actions/BlogViewActions');
 
+var Router = require('react-router');
+
 var UserBar = React.createClass({
+	mixins: [Router.Navigation],
+	
 	render: function() {
 		if(this.props.user) {
 			return (
@@ -27,6 +31,11 @@ var UserBar = React.createClass({
 		}
 	},
 
+	_onCreatePost: function(event) {
+		BlogViewActions.composePost();
+		this.transitionTo('create-post');
+	},
+
 	_onLogout: function(event) {
 		window.location.replace('/auth/logout');
 	},
@@ -34,10 +43,6 @@ var UserBar = React.createClass({
 	_onLogin: function(event) {
 		console.log('login');
 		window.location.replace('/auth/google');
-	},
-
-	_onCreatePost: function(event) {
-		BlogViewActions.composePost();
 	}
 });
 

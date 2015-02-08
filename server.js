@@ -15,12 +15,12 @@ var services = {
 	auth: require('./services/authenticationService')(db)
 };
 
-app.use(bodyParser.json());
 app.use(compression());
 app.use(express.static('dist'));
 app.use(session({secret: keys.SessionSecret, resave: false, saveUninitialized: false}));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(bodyParser.json());
 routes.setup(app, services)
 
 app.listen(3000);

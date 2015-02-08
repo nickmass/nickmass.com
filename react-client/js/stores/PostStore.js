@@ -4,8 +4,8 @@ var assign = require('object-assign');
 var PostFormatter = require('../utils/PostFormatter').format;
 
 var _posts = [];
-var _pageSize = 0;
-var _currentPage = 0;
+var _pageSize = 10;
+var _currentPage = 1;
 var _hasMore = false;
 var _total = 0;
 

@@ -1,12 +1,13 @@
 var React = require('react');
+var Router = require('react-router');
 var BlogPost = require('./BlogPost.react');
-var PostComposer = require('./PostComposer.react');
 var PostStore = require('../stores/PostStore');
-var PostComposerStore = require('../stores/PostComposerStore');
 var UserStore = require('../stores/UserStore');
 var BlogViewActions = require('../actions/BlogViewActions');
 var UserBar = require('./UserBar.react');
 var Header = require('./Header.react');
+
+var BlogWebAPIUtil = require('../utils/BlogWebAPIUtil');
 
 function getBlogState() {
 	return {
@@ -14,26 +15,36 @@ function getBlogState() {
 		currentPage: PostStore.getCurrentPage(),
 		pageSize: PostStore.getPageSize(),
 		hasMore: PostStore.hasMore(),
-		composePost: PostComposerStore.getComposePost(),
 		currentUser: UserStore.getCurrentUser()
 	};
 }
 
+BlogWebAPIUtil.getAllPosts(1, 10);
+
 var BlogApp = React.createClass({
+	mixins: [Router.State, Router.Navigation],
 	getInitialState: function() {
+		var params = this.getParams();
+		if(params.page)
+			BlogWebAPIUtil.getAllPosts(params.page, 10);
+		else {
+			var page = PostStore.getCurrentPage();
+			if(page == 1)
+				this.replaceWith('/');
+			else
+				this.replaceWith('page', {page: page});
+		}
 		return getBlogState();
 	},
 
 	componentDidMount: function() {
 		PostStore.addChangeListener(this._onChange);
 		UserStore.addChangeListener(this._onChange);
-		PostComposerStore.addChangeListener(this._onChange);
 	},
 
 	componentWillUnmount: function() {
 		PostStore.removeChangeListener(this._onChange);
 		UserStore.removeChangeListener(this._onChange);
-		PostComposerStore.removeChangeListener(this._onChange);
 	},
 
 	render: function() {
@@ -45,16 +56,12 @@ var BlogApp = React.createClass({
 		else	
 			pager = <div><button className="u-pull-left" onClick={this._prevPage}>Prev</button></div>;
 
-		var postComposer;
-		if(this.state.composePost)
-			postComposer = <PostComposer />;
 		var user = this.state.currentUser;
 		return (
 			<div>
 			<UserBar user={user} />
 			<Header />
 			<div className="container">
-				{postComposer}
 				{this.state.allPosts.map(function(post){
 					return <BlogPost key={post.id} post={post} user={user} />;
 				})}
@@ -65,15 +72,24 @@ var BlogApp = React.createClass({
 	},
 	
 	_nextPage: function() {
+		this.transitionTo('page', {page: this.state.currentPage + 1});
 		BlogViewActions.nextPage();
 	},
 
 	_prevPage: function() {
+		if(this.state.currentPage == 2)
+			this.transitionTo('/');
+		else
+			this.transitionTo('page', {page: this.state.currentPage - 1});
 		BlogViewActions.prevPage();
 	},
 
 	_onChange: function() {
 		this.setState(getBlogState());
+		if(this.state.currentPage == 1)
+			this.replaceWith('/');
+		else
+			this.replaceWith('page', {page: this.state.currentPage});
 	}
 });
 

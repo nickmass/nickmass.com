@@ -3,18 +3,27 @@ var BlogViewActions = require('../actions/BlogViewActions');
 var PostFormatter = require('../utils/PostFormatter');
 var PostComposerStore = require('../stores/PostComposerStore');
 
+var Router = require('react-router');
+
 function getComposerState() {
 	var post = PostComposerStore.getPost();
 	return {
 			id: post.id,
 			title: post.title,
 			content: post.content,
-			htmlContent: PostFormatter.formatContent(post.content)
+			htmlContent: PostFormatter.formatContent(post.content),
+			new: post.new
 	};
 }
 
 var PostComposer = React.createClass({
+	mixins: [Router.Navigation, Router.State],
+
 	getInitialState: function() {
+		var params = this.getParams();
+		if(params.postId)
+			BlogViewActions.editPost({id: params.postId});
+
 		return getComposerState();
 	},
 	
@@ -27,6 +36,7 @@ var PostComposer = React.createClass({
 	},
 	
 	render: function() {
+		var title = this.state.new ? 'Create Post' : 'Edit Post';
 		var preview;
 		if(this.state.content.length > 0) {
 			preview = (
@@ -39,7 +49,7 @@ var PostComposer = React.createClass({
 		}
 		return (
 				<div id="post-composer">
-					<h4>Create Post</h4>
+					<h4>{title}</h4>
 					<div id="post-entry">
 					<label>Title</label>
 					<input className="u-full-width" type="text" value={this.state.title} onChange={this._onChangeTitle}/>
@@ -66,11 +76,11 @@ var PostComposer = React.createClass({
 
 	_onSubmitPost: function() {
 		BlogViewActions.createPost(this.state);
-		this.setState({id: null, title: '', content: '', htmlContent: ''});
+		this.transitionTo('/');
 	},
 
 	_onCancel: function() {
-		BlogViewActions.hideComposePost();
+		this.transitionTo('/');
 	}
 });
 

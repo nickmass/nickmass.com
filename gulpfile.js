@@ -12,7 +12,7 @@ var minifyCSS = require('gulp-minify-css');
 var concat = require('gulp-concat');
 
 var bundler = watchify(browserify({
-	entries: ['./react-client/js/app.js'],
+	entries: ['./react-client/js/App.js'],
 	debug: true
 }, watchify.args));
 

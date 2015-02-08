@@ -1,6 +1,14 @@
 var React = require('react');
 
 var Header = React.createClass({
+	componentDidMount: function() {
+		HeaderEffect.init();
+	},
+
+	componentWillUnmount: function() {
+		HeaderEffect.stop();
+	},
+		
 	render: function() {
 		return (
 				<div id="header">
@@ -19,11 +27,11 @@ var Header = React.createClass({
 	}
 });
 
-(function() {
-	var height, width, ctx, pointsCOunt, points, oldTimestamp, stop;
+var HeaderEffect = (function(targetElem) {
+	var height, width, ctx, pointsCOunt, points, oldTimestamp, doStop, doReset;
 	var updateRate = 1/60 * 1000
 	function init() {
-		var elem = document.getElementById('header-canvas');
+		var elem = document.getElementById(targetElem);
 	
 		height = elem.clientHeight;
 		width = elem.clientWidth;
@@ -52,8 +60,12 @@ var Header = React.createClass({
 				joined: false,
 			});
 		}
-		stop = false;
+		doStop = false;
+		doReset = false;
 		oldTimestamp = null;
+		
+		dettach();
+		attach();
 		draw();
 	}
 
@@ -93,7 +105,10 @@ var Header = React.createClass({
 		'#bbb'
 			];
 	function draw(timestamp) {
-		if(stop) {
+		if(doStop) {
+			return;
+		}
+		if(doReset) {
 			init();
 			return;
 		}
@@ -147,9 +162,14 @@ var Header = React.createClass({
 	}
 
 	function reset() {
-		stop = true;
+		doReset = true;
 	}
-
+	
+	function stop() {
+		doStop = true;
+		dettach();
+	}
+	
 	function attachEventHandler(event, handler) {
 		var oldHandler = window[event];
 		if(oldHandler) {
@@ -161,8 +181,21 @@ var Header = React.createClass({
 			window[event] = handler;
 		}
 	}
-	attachEventHandler('onload', init);
-	attachEventHandler('onresize', reset);
-})();
+
+	var oldResize = window.onresize;
+	function attach() {
+		attachEventHandler('onresize', reset);
+	}
+
+	function dettach() {
+		window.onresize = oldResize;
+	}
+	
+	return {
+		init: init,
+		stop: stop,
+		reset: reset,
+	}
+})('header-canvas');
 
 module.exports = Header;
