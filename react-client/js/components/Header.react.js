@@ -140,12 +140,24 @@ var Header = React.createClass({
 			point.y = newYLocation;
 		}
 	}
-	window.onload = init;
 
-	window.onresize = function() {
+	function reset() {
 		stop = true;
-	};
+	}
 
+	function attachEventHandler(event, handler) {
+		var oldHandler = window[event];
+		if(oldHandler) {
+			window[event] = function() {
+				oldHandler.apply(this, arguments);
+				handler.apply(this, arguments);
+			};
+		} else {
+			window[event] = handler;
+		}
+	}
+	attachEventHandler('onload', init);
+	attachEventHandler('onresize', reset);
 })();
 
 module.exports = Header;
