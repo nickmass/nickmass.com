@@ -1,4 +1,5 @@
 var express = require('express');
+var compression = require('compression');
 var session = require('express-session');
 var app = module.exports = express();
 var bodyParser = require('body-parser');
@@ -15,6 +16,7 @@ var services = {
 };
 
 app.use(bodyParser.json());
+app.use(compression());
 app.use(express.static('dist'));
 app.use(session({secret: keys.SessionSecret, resave: false, saveUninitialized: false}));
 app.use(passport.initialize());
