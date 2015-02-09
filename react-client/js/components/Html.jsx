@@ -15,7 +15,7 @@ var Html = React.createClass({
 	<body dangerouslySetInnerHTML={{__html: this.props.markup}}>
 	</body>
 	<script dangerouslySetInnerHTML={{__html: this.props.state}}></script>
-	<script src="/js/bundle.js"></script>
+	<script src="/js/bundle.js" defer></script>
 </html>
 			   );
 	}
