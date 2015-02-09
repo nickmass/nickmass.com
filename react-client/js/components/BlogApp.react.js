@@ -53,7 +53,7 @@ var BlogApp = React.createClass({
 			pager = <div><button className="u-pull-right" onClick={this._nextPage}>Next</button></div>;
 		else if(this.state.hasMore)
 			pager = <div><button className="u-pull-left" onClick={this._prevPage}>Prev</button><button className="u-pull-right" onClick={this._nextPage}>Next</button></div>;
-		else	
+		else if(this.state.currentPage > 1)	
 			pager = <div><button className="u-pull-left" onClick={this._prevPage}>Prev</button></div>;
 
 		var user = this.state.currentUser;
