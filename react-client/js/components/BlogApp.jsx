@@ -36,15 +36,13 @@ var BlogApp = React.createClass({
 			pager = <div><button className="u-pull-left" onClick={this.prevPage}>Prev</button></div>;
 		var user = this.state.currentUser;
 		
-		var refreshEvent = this.onRefresh;
-
 		return (
 			<div>
-			<UserBar user={user} onRefresh={refreshEvent}/>
+			<UserBar user={user}/>
 			<Header />
 			<div className="container">
 				{this.state.posts.map(function(post){
-					return <BlogPost key={post.id} post={post} user={user} onRefresh={refreshEvent}/>;
+					return <BlogPost key={post.id} post={post} user={user}/>;
 				})}
 				{pager}
 			</div>
@@ -71,10 +69,6 @@ var BlogApp = React.createClass({
 		this.setState(postState);
 		this.setState(userState);
 	},
-	
-	onRefresh: function() {
-		this.executeAction(PostActions.getPostPage, {pageSize: this.state.pageSize, page: this.state.currentPage});
-	}
 });
 
 module.exports = BlogApp;

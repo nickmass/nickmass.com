@@ -31,7 +31,7 @@ var UserBar = React.createClass({
 	},
 
 	onCreatePost: function(event) {
-		this.executeAction(PostActions.composePost, {refreshEvent: this.props.onRefresh});
+		this.executeAction(PostActions.composePost);
 		this.transitionTo('create-post');
 	},
 

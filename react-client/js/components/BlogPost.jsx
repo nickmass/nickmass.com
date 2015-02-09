@@ -37,18 +37,12 @@ var BlogPost = React.createClass({
 	},
 
 	onEdit: function() {
-		var payload = {
-			id: this.props.post.id,
-			refreshEvent: this.props.onRefresh
-		};
-		this.executeAction(PostActions.editPost, payload);
 		this.transitionTo('edit-post', {postId : this.props.post.id});
 	},
 
 	onDelete: function() {
 		if(window.confirm('Are you sure you want to delete this post?')) {
 			this.executeAction(PostActions.deletePost, this.props.post);
-			this.props.onRefresh();
 		}
 	}
 });

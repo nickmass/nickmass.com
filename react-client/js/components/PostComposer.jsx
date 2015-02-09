@@ -32,11 +32,10 @@ var PostComposer = React.createClass({
 		var postId = this.getParams().postId || null;
 		
 		if(postId != this.state.id) {
-			var refresh = function(){};
 			if(postId == null)
-				this.executeAction(PostActions.composePost, {refreshEvent: refresh});
+				this.executeAction(PostActions.composePost);
 			else
-				this.executeAction(PostActions.editPost, {id: postId, refreshEvent: refresh});
+				this.executeAction(PostActions.editPost, {id: postId});
 		}
 		
 		var title = this.state.new ? 'Create Post' : 'Edit Post';
@@ -79,7 +78,7 @@ var PostComposer = React.createClass({
 	},
 
 	onSubmitPost: function() {
-		this.executeAction(PostActions.createOrUpdatePost, this.state);	
+		this.executeAction(PostActions.createOrUpdatePost, this.state);
 		this.transitionTo('/');
 	},
 
