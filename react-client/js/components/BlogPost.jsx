@@ -1,11 +1,12 @@
 var React = require('react');
 var ReactPropTypes = React.PropTypes;
-var BlogViewActions = require('../actions/BlogViewActions');
-
 var Router = require('react-router');
+var FluxibleMixin = require('fluxible').Mixin;
+
+var PostActions = require('../actions/PostActions');
 
 var BlogPost = React.createClass({
-	mixins: [Router.Navigation],
+	mixins: [Router.Navigation, FluxibleMixin],
 
 	propTypes: {
 		post: ReactPropTypes.object.isRequired
@@ -19,7 +20,7 @@ var BlogPost = React.createClass({
 		if(this.props.user) {
 			postEditor = (
 					<div className="u-pull-right">
-					<button style={{marginRight: '16px'}} onClick={this._onEdit}>Edit</button><button onClick={this._onDelete}>Delete</button>
+					<button style={{marginRight: '16px'}} onClick={this.onEdit}>Edit</button><button onClick={this.onDelete}>Delete</button>
 					</div>
 					);
 		}
@@ -35,13 +36,19 @@ var BlogPost = React.createClass({
 		);
 	},
 
-	_onEdit: function() {
-		this.transitionTo('edit-post', {postId: this.props.post.id});
+	onEdit: function() {
+		var payload = {
+			id: this.props.post.id,
+			refreshEvent: this.props.onRefresh
+		};
+		this.executeAction(PostActions.editPost, payload);
+		this.transitionTo('edit-post', {postId : this.props.post.id});
 	},
 
-	_onDelete: function() {
+	onDelete: function() {
 		if(window.confirm('Are you sure you want to delete this post?')) {
-			BlogViewActions.deletePost(this.props.post);
+			this.executeAction(PostActions.deletePost, this.props.post);
+			this.props.onRefresh();
 		}
 	}
 });

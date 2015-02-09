@@ -1,57 +1,64 @@
-var AppDispatcher = require('../dispatcher/AppDispatcher');
-var EventEmitter = require('events').EventEmitter;
-var assign = require('object-assign');
-var PostFormatter = require('../utils/PostFormatter').format;
+var createStore  = require('fluxible/utils/createStore');
+var PostFormatter = require('../utils/PostFormatter').formatContent;
 
-var _composePost = false;
-var _post = {
-	id: null,
-	content: '',
-	title: '',
-	new: true
-};
-
-var PostComposerStore = assign({}, EventEmitter.prototype, {
-	getPost: function() {
-		return _post;
+var PostComposerStore = createStore({
+	storeName: 'PostComposerStore',
+	initialize: function(dispatcher) {
+		this.id = null;
+		this.content = '';
+		this.title = '';
+		this.new = true;
+		this.htmlContent = '';
+		this.refreshEvent = function() {};
+	},
+	
+	handleComposePost: function(payload) {
+		this.id = null;
+		this.content = '';
+		this.title = '';
+		this.new = true;
+		this.htmlContent = '';
+		this.refreshEvent = payload.refreshEvent;
+		this.emitChange();
+	},
+	handleEditPost: function(payload) {
+		this.new =false;
+		this.id = payload.id;
+		this.content = payload.content;
+		this.title = payload.title;
+		this.htmlContent = PostFormatter(this.content);
+		this.refreshEvent = payload.refreshEvent;
+		this.emitChange();
+	},
+	
+	handlers: {
+		COMPOSE_POST: 'handleComposePost',
+		EDIT_POST: 'handleEditPost'
 	},
 
-	emitChange: function() {
-		this.emit('change');
+	getState: function () {
+		return {
+			id: this.id,
+			content: this.content,
+			title: this.title,
+			new: this.new,
+			htmlContent: PostFormatter(this.content),
+			refreshEvent: this.refreshEvent
+		};
 	},
 
-	addChangeListener: function(callback) {
-		this.on('change', callback);
+	dehydrate: function() {
+		return this.getState();
 	},
 
-	removeChangeListener: function(callback) {
-		this.removeListener('change', callback);
+	rehydrate: function(state) {
+		this.id = state.id;
+		this.content = state.content;
+		this.title = state.title;
+		this.new = state.new;
+		this.htmlContent = PostFormatter(state.content);
+		this.refreshEvent = state.refreshEvent;
 	}
 });
-
-PostComposerStore.dispatchToken = AppDispatcher.register(function(payload) {
-	var action = payload.action;
-	switch(action.type) {
-		case 'COMPOSE_POST':
-			_post = {
-				id: null,
-				content: '',
-				title: '',
-				new: true
-			};
-			PostComposerStore.emitChange();
-			break;
-		case 'EDIT_POST':
-			_post = {
-				id: action.post.id,
-				title: action.post.title,
-				content: action.post.content,
-				new: false
-			};
-			PostComposerStore.emitChange();
-		default:
-	}
-});
-
 
 module.exports = PostComposerStore;

@@ -8,7 +8,7 @@ var baseURL = require('../config').baseURL;
 var redirectUrl = baseURL + '/auth/google/return';
 
 module.exports = function(db) {
-	var UserService = require('../services/userService')(db);
+	var Users = require('./Users')(db);
 	var oauth2Client = new OAuth2(keys.GoogleOAuth2ClientID, keys.GoogleOAuth2ClientSecret, redirectUrl);
 
 
@@ -21,7 +21,7 @@ module.exports = function(db) {
 	});
 
 	passport.deserializeUser(function(id, done) {
-		UserService.getUser(id).then(function(user){
+		Users.getUser(id).then(function(user){
 			done(null, user);
 		}, function(err){
 			done(err, {});
@@ -41,10 +41,10 @@ module.exports = function(db) {
 				refresh_token: refreshToken
 			});
 			plus.people.get({ userId: 'me', auth: oauth2Client }, function(err, res) {
-				UserService.getSocialUser('google:' + res.id).then(function(user) {
+				Users.getSocialUser('google:' + res.id).then(function(user) {
 					done(null, user);
 				}, function(err) {
-					UserService.createSocialUser('google:' + res.id, { name: res.displayName, email: res.emails[0].value})
+					Users.createSocialUser('google:' + res.id, { name: res.displayName, email: res.emails[0].value})
 						.then(function(user) {
 							done(null, user);
 						}, function(err) {

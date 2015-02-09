@@ -1,34 +1,32 @@
-var AppDispatcher = require('../dispatcher/AppDispatcher');
-var EventEmitter = require('events').EventEmitter;
-var assign = require('object-assign');
+var createStore = require('fluxible/utils/createStore');
 
-var _currentUser = false;
-var UserStore = assign({}, EventEmitter.prototype, {
-	getCurrentUser: function() {
-		return _currentUser;
+var UserStore = createStore({
+	storeName: 'UserStore',
+	initialize: function(dispatcher) {
+		this.currentUser = false;
+	},
+
+	handleUserChange: function(payload) {
+		this.currentUser = payload;
+		this.emitChange();
 	},
 	
-	emitChange: function() {
-		this.emit('change');
+	handlers: {
+		RECIEVE_CURRENT_USER: 'handleUserChange'
 	},
 
-	addChangeListener: function(callback) {
-		this.on('change', callback);
+	getState: function() {
+		return {
+			currentUser: this.currentUser
+		};
+	},
+	
+	dehydrate: function() {
+		return this.getState();
 	},
 
-	removeChangeListener: function(callback) {
-		this.removeListener('change', callback);
-	}
-});
-
-UserStore.dispatchToken = AppDispatcher.register(function(payload) {
-	var action = payload.action;
-	switch(action.type) {
-		case 'RECEIVE_CURRENT_USER':
-			_currentUser = action.currentUser;
-			UserStore.emitChange();
-			break;
-		default:
+	rehydrate: function(state) {
+		this.currentUser = state.currentUser;
 	}
 });
 

@@ -11,8 +11,9 @@ var db = redis.createClient();
 var passport = require('passport');
 
 var services = {
-	posts : require('./services/postService')(app, express, db),
-	auth: require('./services/authenticationService')(db)
+	PostsAPI : require('./services/PostAPI')(app, express, db),
+	Authentication: require('./services/Authentication')(db),
+	ServerRender: require('./services/ServerRender')(db)
 };
 
 app.use(compression());

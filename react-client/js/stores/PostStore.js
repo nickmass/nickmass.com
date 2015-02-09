@@ -1,62 +1,52 @@
-var AppDispatcher = require('../dispatcher/AppDispatcher');
-var EventEmitter = require('events').EventEmitter;
-var assign = require('object-assign');
 var PostFormatter = require('../utils/PostFormatter').format;
 
-var _posts = [];
-var _pageSize = 10;
-var _currentPage = 1;
-var _hasMore = false;
-var _total = 0;
+var createStore = require('fluxible/utils/createStore');
 
-var PostStore = assign({}, EventEmitter.prototype, {
-	getAll: function() {
-		return _posts;
+var PostStore = createStore({
+	storeName: 'PostStore',
+
+	initialize: function(dispatcher) {
+		this.posts = [];
+		this.pageSize = 10;
+		this.currentPage = 1;
+		this.hasMore = false;
+		this.total = 0;
 	},
 	
-	getCurrentPage: function() {
-		return _currentPage;
+	handlers: {
+		RECIEVE_POST_PAGE: 'handlePageChange'
 	},
 
-	getPageSize: function() {
-		return _pageSize;
+	handlePageChange: function(payload) {
+		this.total = payload.total;
+		this.posts = payload.items.map(function(post){ return PostFormatter(post);});
+		this.hasMore = payload.hasMore;
+		this.pageSize = payload.pageSize;
+		this.currentPage = payload.page;
+		this.emitChange();
+	},
+	
+	getState: function() {
+		return {
+			total: this.total,
+			hasMore: this.hasMore,
+			pageSize: this.pageSize,
+			currentPage: this.currentPage,
+			posts: this.posts
+		};
 	},
 
-	hasMore: function() {
-		return _hasMore;
+	dehydrate: function() {
+		return this.getState();
 	},
 
-	total: function() {
-		return _total;
-	},
-		
-	emitChange: function() {
-		this.emit('change');
-	},
-
-	addChangeListener: function(callback) {
-		this.on('change', callback);
-	},
-
-	removeChangeListener: function(callback) {
-		this.removeListener('change', callback);
+	rehydrate: function(state) {
+		this.total = state.total;
+		this.posts = state.posts;
+		this.hasMore = state.posts;
+		this.pageSize = state.pageSize;
+		this.currentPage = state.currentPage;
 	}
 });
-
-PostStore.dispatchToken = AppDispatcher.register(function(payload) {
-	var action = payload.action;
-	switch(action.type) {
-		case 'RECEIVE_ALL_POSTS':
-			_currentPage = action.currentPage;
-			_pageSize = action.pageSize;
-			_posts = action.posts.map(PostFormatter);
-			_hasMore = action.hasMore;
-			_total = action.total;
-			PostStore.emitChange();
-			break;
-		default:
-	}
-});
-
 
 module.exports = PostStore;

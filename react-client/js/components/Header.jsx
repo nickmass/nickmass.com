@@ -28,6 +28,12 @@ var Header = React.createClass({
 });
 
 var HeaderEffect = (function(targetElem) {
+	if(typeof window === 'undefined') {
+		return {
+			init: function(){},
+			stop: function(){}
+		};
+	}
 	var height, width, ctx, pointsCOunt, points, oldTimestamp, doStop, doReset;
 	var updateRate = 1/60 * 1000
 	function init() {
