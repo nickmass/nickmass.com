@@ -29,6 +29,16 @@ var PostComposer = React.createClass({
 	},
 
 	render: function() {
+		var postId = this.getParams().postId || null;
+		
+		if(postId != this.state.id) {
+			var refresh = function(){};
+			if(postId == null)
+				this.executeAction(PostActions.composePost, {refreshEvent: refresh});
+			else
+				this.executeAction(PostActions.editPost, {id: postId, refreshEvent: refresh});
+		}
+		
 		var title = this.state.new ? 'Create Post' : 'Edit Post';
 		var preview;
 		if(this.state.content.length > 0) {

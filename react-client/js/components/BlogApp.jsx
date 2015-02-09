@@ -22,6 +22,11 @@ var BlogApp = React.createClass({
 	},
 
 	render: function() {
+		var page = this.getParams().page || 1;
+
+		if(page != this.state.currentPage)
+			this.executeAction(PostActions.getPostPage, {pageSize: this.state.pageSize, page: page});
+
 		var pager;
 		if(this.state.currentPage == 1 && this.state.hasMore)
 			pager = <div><button className="u-pull-right" onClick={this.nextPage}>Next</button></div>;
@@ -48,11 +53,16 @@ var BlogApp = React.createClass({
 	},
 	
 	nextPage: function() {
-		this.executeAction(PostActions.getPostPage, {pageSize: this.state.pageSize, page: this.state.currentPage + 1});
+		var newPage = this.state.currentPage + 1;
+		this.transitionTo('page', {page: newPage});
 	},
 
 	prevPage: function() {
-		this.executeAction(PostActions.getPostPage, {pageSize: this.state.pageSize, page: this.state.currentPage - 1});
+		var newPage = this.state.currentPage - 1;
+		if(newPage == 1)
+			this.transitionTo('/');
+		else
+			this.transitionTo('page', {page: newPage});
 	},
 
 	onChange: function() {

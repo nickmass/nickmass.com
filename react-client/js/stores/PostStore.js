@@ -8,7 +8,7 @@ var PostStore = createStore({
 	initialize: function(dispatcher) {
 		this.posts = [];
 		this.pageSize = 10;
-		this.currentPage = 1;
+		this.currentPage = 0;
 		this.hasMore = false;
 		this.total = 0;
 	},

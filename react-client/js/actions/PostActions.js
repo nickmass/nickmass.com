@@ -1,23 +1,4 @@
 var PostActions = {
-	getInitialPosts: function(actionContext, payload, done) {
-		var user = actionContext.UserInterface.getCurrentUser();
-		var posts = actionContext.PostInterface.getPosts(10, 0)
-		
-		.then(function(posts) {
-			posts.pageSize = 10;
-			posts.page = 1;
-			actionContext.dispatch('RECIEVE_POST_PAGE', posts);
-			user.then(function(user) {
-				if(user == 'Not Found')
-					user = false;
-				actionContext.dispatch('RECIEVE_CURRENT_USER', user);
-				done();
-			}, function() {
-				done();
-			});
-		});
-	},
-
 	getPostPage: function(actionContext, payload, done) {
 		var skip = (payload.page - 1) * payload.pageSize;
 		var limit = payload.pageSize;

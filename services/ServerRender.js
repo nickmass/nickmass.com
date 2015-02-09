@@ -6,6 +6,7 @@ var Html = require('../react-client/js/components/Html.jsx');
 var Router = require('react-router');
 var serialize = require('serialize-javascript');
 
+var UserActions = require('../react-client/js/actions/UserActions');
 var PostActions = require('../react-client/js/actions/PostActions');
 
 ServerRender = function(db) {
@@ -23,7 +24,8 @@ ServerRender = function(db) {
 			}
 		};
 		Router.run(App.getAppComponent(), req.path, function (Handler, state) {
-			context.executeAction(PostActions.getInitialPosts, state, function() {
+			context.executeAction(UserActions.getCurrentUser, state, function() {
+			context.executeAction(PostActions.getPostPage, {page: 1, pageSize: 10}, function() {
 				var exposed = 'window.App=' + serialize(App.dehydrate(context)) + ';';
 				React.withContext(context.getComponentContext(), function() {
 					var html = React.renderToStaticMarkup(Html({
@@ -34,6 +36,7 @@ ServerRender = function(db) {
 					res.write(html);
 					res.end();
 				});
+			});
 			});
 		});
 	};
