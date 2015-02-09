@@ -8,7 +8,7 @@ var Header = React.createClass({
 	componentWillUnmount: function() {
 		HeaderEffect.stop();
 	},
-		
+
 	render: function() {
 		return (
 				<div id="header">

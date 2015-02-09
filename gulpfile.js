@@ -9,41 +9,43 @@ var sourcemaps = require('gulp-sourcemaps');
 var nodemon = require('gulp-nodemon');
 var jasmine = require('gulp-jasmine');
 var minifyCSS = require('gulp-minify-css');
+var minifyHTML = require('gulp-minify-html');
 var concat = require('gulp-concat');
+var del = require('del');
 
-var bundler = watchify(browserify({
+var bundler = browserify({
 	entries: ['./react-client/js/App.js'],
-	debug: true
-}, watchify.args));
+	debug: true,
+	fullPaths: false
+});
 
-var bundle = function() {
+gulp.task('js', function() {
 	return bundler
 		.transform(reactify)
 		.bundle()
+		.on('error', function(err) {
+			console.log('[error] ' + err.message);
+			this.emit('end');
+		})
 		.pipe(source('bundle.js'))
 		.pipe(buffer())
 		.pipe(sourcemaps.init({loadMaps: true}))
 		.pipe(uglify())
 		.pipe(sourcemaps.write('./'))
-		.pipe(gulp.dest('./dist/js/'));
-};
-
-gulp.task('js', bundle);
-
-bundler.on('update', function() { console.log('[watchify] Updating...'); });
-bundler.on('update', bundle);
-bundler.on('log', function(log) { console.log('[watchify] ' + log); });
+		.pipe(gulp.dest('dist/js/'));
+});
 
 gulp.task('css', function() {
-	gulp.src(['./react-client/css/normalize.css', './react-client/css/skeleton.css', './react-client/css/site.css'])
+	gulp.src(['react-client/css/normalize.css', 'react-client/css/skeleton.css', 'react-client/css/site.css'])
 		.pipe(concat('bundle.css'))
 		.pipe(minifyCSS())
-		.pipe(gulp.dest('./dist/css/'));
+		.pipe(gulp.dest('dist/css/'));
 });
 
 gulp.task('html', function() {
-	gulp.src('./react-client/*.html')
-		.pipe(gulp.dest('./dist/'));
+	gulp.src('react-client/*.html')
+		.pipe(minifyHTML())
+		.pipe(gulp.dest('dist/'));
 });
 
 gulp.task('test', function() {
@@ -51,15 +53,16 @@ gulp.task('test', function() {
 		.pipe(jasmine());
 });
 
-gulp.task('dev', ['js', 'css', 'html'], function() {
-	var cssWatch = gulp.watch('./react-client/css/*.css', ['css']);
-	cssWatch.on('change', function(event) {
-		console.log('[gulp] Bundling CSS');
-	});
+gulp.task('clean', function(cb) {
+	del(['dist'], cb);
+});
 
-	var htmlWatch = gulp.watch('./react-client/*.html', ['html']);
-	htmlWatch.on('change', function(event) {
-		console.log('[gulp] Moving HTML');
-	});
+gulp.task('build', ['js', 'css', 'html'], function() {
+});
+
+gulp.task('default', ['js', 'css', 'html'], function() {
+	gulp.watch('react-client/css/*.css', ['css']);
+	gulp.watch('react-client/*.html', ['html']);
+	gulp.watch('react-client/**/*.js', ['js']);
 	nodemon({ script: 'server.js', ext: 'js', ignore: ['react-client/**/*', 'node_modules/**/*', 'spec/**/*', 'dist/**/*']});
 });
