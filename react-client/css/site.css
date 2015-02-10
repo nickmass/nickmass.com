@@ -41,6 +41,7 @@ code,kbd,pre,samp {
 }
 
 #header > h4 {
+	display:none;
 	margin: 0;
 	text-align: center
 }
@@ -61,7 +62,7 @@ code,kbd,pre,samp {
 }
 
 #header .social-links > li {
-	display: inline-block;
+	display: block;
 	margin: 0 1px;
 }
 
@@ -75,14 +76,30 @@ code,kbd,pre,samp {
 #header .social-links > li > a:hover {
 	text-decoration: underline;
 }
+
+
 #header .social-links > li > a {
 	display:inline-block;
-	width: 150px;
+	width: 100%;
 	height: 56px;
 	line-height: 56px;
 	text-decoration: none;
 	color: #000;
 	vertical-align: middle;
+}
+
+@media (min-width: 550px) {
+	#header .social-links > li {
+		display: inline-block;
+	}
+
+	#header .social-links > li > a {
+		width: 150px;
+	}
+
+	#header > h4 {
+		display: block;
+	}
 }
 
 #header-canvas {

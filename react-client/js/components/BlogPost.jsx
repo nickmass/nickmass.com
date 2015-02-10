@@ -5,9 +5,16 @@ var FluxibleMixin = require('fluxible').Mixin;
 
 var PostActions = require('../actions/PostActions');
 
+var UserStore = require('../stores/UserStore');
+
 var BlogPost = React.createClass({
 	mixins: [Router.Navigation, FluxibleMixin],
-
+	statics: {
+		storeListeners: [UserStore]
+	},
+	getInitialState: function() {
+		return this.getStore(UserStore).getState();
+	},
 	propTypes: {
 		post: ReactPropTypes.object.isRequired
 	},
@@ -17,7 +24,7 @@ var BlogPost = React.createClass({
 
 		var postEditor;
 
-		if(this.props.user) {
+		if(this.state.currentUser) {
 			postEditor = (
 					<div className="u-pull-right">
 					<button style={{marginRight: '16px'}} onClick={this.onEdit}>Edit</button><button onClick={this.onDelete}>Delete</button>
@@ -34,6 +41,10 @@ var BlogPost = React.createClass({
 				<hr/>
 			</article>
 		);
+	},
+
+	onChange: function() {
+		this.setState(this.getStore(UserPost).getState());
 	},
 
 	onEdit: function() {

@@ -43,7 +43,7 @@ var PostStore = createStore({
 	rehydrate: function(state) {
 		this.total = state.total;
 		this.posts = state.posts;
-		this.hasMore = state.posts;
+		this.hasMore = state.hasMore;
 		this.pageSize = state.pageSize;
 		this.currentPage = state.currentPage;
 	}

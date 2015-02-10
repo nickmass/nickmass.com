@@ -2,6 +2,8 @@ var PostStore = require('../stores/PostStore');
 
 var PostActions = {
 	getPostPage: function(actionContext, payload, done) {
+		if(!payload.pageSize)
+			payload.pageSize = actionContext.getStore(PostStore).getState().pageSize;
 		var skip = (payload.page - 1) * payload.pageSize;
 		var limit = payload.pageSize;
 		actionContext.PostInterface.getPosts(limit, skip).then(function(posts) {

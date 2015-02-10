@@ -5,22 +5,21 @@ var UserBar = require('./UserBar.jsx');
 var Header = require('./Header.jsx');
 var BlogPost = require('./BlogPost.jsx');
 var PostStore = require('../stores/PostStore');
-var UserStore = require('../stores/UserStore');
 
 var PostActions = require('../actions/PostActions');
 
 var BlogApp = React.createClass({
 	mixins: [Router.State, Router.Navigation, FluxibleMixin],
 	getInitialState: function() {
-		var state = this.getStore(PostStore).getState();
-		var userState = this.getStore(UserStore).getState();
-		state.currentUser = userState.currentUser;
-		return state;
+		return this.getStore(PostStore).getState();
 	},
 	statics: {
-		storeListeners: [PostStore, UserStore]
+		storeListeners: [PostStore],
+		fetchData: function(executeAction, params, cb) {
+			var page = Number(params.page) || 1;
+			executeAction(PostActions.getPostPage, {page: page}, cb);
+		}
 	},
-
 	render: function() {
 		var page = Number(this.getParams().page) || 1;
 
@@ -38,7 +37,7 @@ var BlogApp = React.createClass({
 		
 		return (
 			<div>
-			<UserBar user={user}/>
+			<UserBar />
 			<Header />
 			<div className="container">
 				{this.state.posts.map(function(post){
@@ -64,11 +63,8 @@ var BlogApp = React.createClass({
 	},
 
 	onChange: function() {
-		var postState = this.getStore(PostStore).getState();
-		var userState = this.getStore(UserStore).getState();
-		this.setState(postState);
-		this.setState(userState);
-	},
+		this.setState(this.getStore(PostStore).getState());
+	}
 });
 
 module.exports = BlogApp;

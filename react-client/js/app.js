@@ -1,4 +1,5 @@
 var Fluxible = require('fluxible');
+require('events').EventEmitter.prototype._maxListeners = 100;
 
 var app = new Fluxible({
 	appComponent: require('./components/Routes.jsx')

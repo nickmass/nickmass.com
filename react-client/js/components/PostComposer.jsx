@@ -16,7 +16,14 @@ var PostComposer = React.createClass({
 	},
 
 	statics: {
-		storeListeners: [PostComposerStore]
+		storeListeners: [PostComposerStore],
+		fetchData: function(executeAction, params, cb) {
+			var postId = params.postId || null;
+			if(postId == null)
+				executeAction(PostActions.composePost, {}, cb);
+			else
+				executeAction(PostActions.editPost, {id: postId}, cb);
+		}
 	},
 
 	render: function() {
@@ -71,7 +78,7 @@ var PostComposer = React.createClass({
 	onSubmitPost: function() {
 		this.executeAction(PostActions.createOrUpdatePost, this.state);
 		var page = this.getStore(PostStore).currentPage;
-		if(page == 1)
+		if(page <= 1)
 			this.transitionTo('/');
 		else
 			this.transitionTo('page', {page: page});
@@ -79,7 +86,7 @@ var PostComposer = React.createClass({
 
 	onCancel: function() {
 		var page = this.getStore(PostStore).currentPage;
-		if(page == 1)
+		if(page <= 1)
 			this.transitionTo('/');
 		else
 			this.transitionTo('page', {page: page});

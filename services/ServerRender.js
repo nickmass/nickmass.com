@@ -24,8 +24,15 @@ ServerRender = function(db) {
 			}
 		};
 		Router.run(App.getAppComponent(), req.path, function (Handler, state) {
-			context.executeAction(UserActions.getCurrentUser, state, function() {
-			context.executeAction(PostActions.getPostPage, {page: 1, pageSize: 10}, function() {
+			var dataLoads = state.routes
+				.filter(function(r) { 
+					return r.handler.fetchData;
+				}).map(function(r) {
+					return Q(r.handler).ninvoke('fetchData', context.executeAction.bind(context), state.params);
+				});
+			dataLoads.push(Q(context).ninvoke('executeAction', UserActions.getCurrentUser, {}));
+
+			Q.all(dataLoads).then(function() {
 				var exposed = 'window.App=' + serialize(App.dehydrate(context)) + ';';
 				React.withContext(context.getComponentContext(), function() {
 					var html = React.renderToStaticMarkup(Html({
@@ -36,7 +43,6 @@ ServerRender = function(db) {
 					res.write(html);
 					res.end();
 				});
-			});
 			});
 		});
 	};
