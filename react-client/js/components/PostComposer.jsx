@@ -2,21 +2,12 @@ var React = require('react');
 var FluxibleMixin = require('fluxible').Mixin;
 var PostFormatter = require('../utils/PostFormatter');
 var PostComposerStore = require('../stores/PostComposerStore');
+var PostStore = require('../stores/PostStore');
 
 var PostActions = require('../actions/PostActions');
 
 var Router = require('react-router');
 
-function getComposerState() {
-	var post = PostComposerStore.getPost();
-	return {
-			id: post.id,
-			title: post.title,
-			content: post.content,
-			htmlContent: PostFormatter.formatContent(post.content),
-			new: post.new
-	};
-}
 
 var PostComposer = React.createClass({
 	mixins: [Router.Navigation, Router.State, FluxibleMixin],
@@ -79,11 +70,19 @@ var PostComposer = React.createClass({
 
 	onSubmitPost: function() {
 		this.executeAction(PostActions.createOrUpdatePost, this.state);
-		this.transitionTo('/');
+		var page = this.getStore(PostStore).currentPage;
+		if(page == 1)
+			this.transitionTo('/');
+		else
+			this.transitionTo('page', {page: page});
 	},
 
 	onCancel: function() {
-		this.transitionTo('/');
+		var page = this.getStore(PostStore).currentPage;
+		if(page == 1)
+			this.transitionTo('/');
+		else
+			this.transitionTo('page', {page: page});
 	}
 });
 

@@ -51,7 +51,7 @@ var Posts = function(db, user) {
 		}).spread(function(posts, length) {
 			return {
 				items:posts,
-				hasMore: length >= postLimit - 1 + postSkip,
+				hasMore: length > postLimit + postSkip,
 				total: length
 			};
 		});

@@ -72,6 +72,9 @@ code,kbd,pre,samp {
 	border-left: 1px solid #e1e1e1;
 }
 
+#header .social-links > li > a:hover {
+	text-decoration: underline;
+}
 #header .social-links > li > a {
 	display:inline-block;
 	width: 150px;

@@ -22,7 +22,7 @@ var BlogApp = React.createClass({
 	},
 
 	render: function() {
-		var page = this.getParams().page || 1;
+		var page = Number(this.getParams().page) || 1;
 
 		if(page != this.state.currentPage)
 			this.executeAction(PostActions.getPostPage, {pageSize: this.state.pageSize, page: page});
