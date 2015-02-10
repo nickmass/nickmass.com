@@ -40,6 +40,11 @@ code,kbd,pre,samp {
 	text-align: center;
 }
 
+#header > h1 > a {
+	color: #000;
+	text-decoration: none;
+}
+
 #header > h4 {
 	display:none;
 	margin: 0;

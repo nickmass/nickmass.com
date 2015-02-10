@@ -7,6 +7,7 @@ var errors = {
 
 var Posts = function(db, user) {
 	var Users = require('./Users')(db);
+	var PageCache = require('./PageCache')(db);
 	this.getPosts = function(limit, skip) {
 		var postLimit = (limit || 10) | 0;
 		var postSkip = (skip || 0) | 0;
@@ -82,10 +83,10 @@ var Posts = function(db, user) {
 		
 		return Q(db).ninvoke('incr', 'nextPostId').then(function(data) {
 			newPost.id = data;
-			
 			return Q.all([Q(db).ninvoke('lpush', 'posts', newPost.id),
 						  Q(db).ninvoke('hmset', 'post:' + newPost.id, newPost)]);
 		}).then(function(data) {
+			PageCache.clearCache();	
 			return newPost.id;
 		});
 	};
@@ -104,6 +105,7 @@ var Posts = function(db, user) {
 		return Q(db).ninvoke('hexists', 'post:' + id, 'id').then(function(data) {
 			if(data) {
 				return Q(db).ninvoke('hmset', 'post:' + id, updatedPost).then(function(data) {
+					PageCache.clearCache();	
 					return id;
 				});
 			} else {
@@ -125,6 +127,7 @@ var Posts = function(db, user) {
 
 			return Q(db).ninvoke('lrem', 'posts', -1, id);
 		}).then(function() {
+			PageCache.clearCache();	
 			return;
 		});
 	};

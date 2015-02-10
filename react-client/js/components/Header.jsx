@@ -13,7 +13,7 @@ var Header = React.createClass({
 		return (
 				<div id="header">
 				<canvas id="header-canvas" />
-				<h1>NickMass.com</h1>
+				<h1><a href="http://nickmass.com">NickMass.com</a></h1>
 				<h4>Some short subtitle</h4>
 				<div className="social-container">
 				<ul className="social-links">
