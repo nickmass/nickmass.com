@@ -11,10 +11,12 @@ var PostStore = createStore({
 		this.currentPage = 0;
 		this.hasMore = false;
 		this.total = 0;
+		this.post = {}
 	},
 	
 	handlers: {
-		RECIEVE_POST_PAGE: 'handlePageChange'
+		RECIEVE_POST_PAGE: 'handlePageChange',
+		RECIEVE_POST: 'handleRecievePost'
 	},
 
 	handlePageChange: function(payload) {
@@ -26,13 +28,19 @@ var PostStore = createStore({
 		this.emitChange();
 	},
 	
+	handleRecievePost: function(payload) {
+		this.post = PostFormatter(payload);
+		this.emitChange();
+	},
+
 	getState: function() {
 		return {
 			total: this.total,
 			hasMore: this.hasMore,
 			pageSize: this.pageSize,
 			currentPage: this.currentPage,
-			posts: this.posts
+			posts: this.posts,
+			post: this.post
 		};
 	},
 
@@ -46,6 +54,7 @@ var PostStore = createStore({
 		this.hasMore = state.hasMore;
 		this.pageSize = state.pageSize;
 		this.currentPage = state.currentPage;
+		this.post = state.post;
 	}
 });
 

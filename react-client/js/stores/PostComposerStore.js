@@ -9,6 +9,7 @@ var PostComposerStore = createStore({
 		this.title = '';
 		this.new = true;
 		this.htmlContent = '';
+		this.urlFragment = '';
 	},
 	
 	handleComposePost: function(payload) {
@@ -17,6 +18,7 @@ var PostComposerStore = createStore({
 		this.title = '';
 		this.new = true;
 		this.htmlContent = '';
+		this.urlFragment = '';
 		this.emitChange();
 	},
 	handleEditPost: function(payload) {
@@ -25,6 +27,7 @@ var PostComposerStore = createStore({
 		this.content = payload.content;
 		this.title = payload.title;
 		this.htmlContent = PostFormatter(this.content);
+		this.urlFragment = payload.urlFragment;
 		this.emitChange();
 	},
 	
@@ -40,6 +43,7 @@ var PostComposerStore = createStore({
 			title: this.title,
 			new: this.new,
 			htmlContent: PostFormatter(this.content),
+			urlFragment: this.urlFragment
 		};
 	},
 
@@ -53,6 +57,7 @@ var PostComposerStore = createStore({
 		this.title = state.title;
 		this.new = state.new;
 		this.htmlContent = PostFormatter(state.content);
+		this.urlFragment = state.urlFragment;
 	}
 });
 

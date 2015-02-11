@@ -18,12 +18,8 @@ app.rehydrate(dehydratedState, function (err, context) {
 	actionContext.PostInterface = PostAPIInterface;
 	actionContext.UserInterface = UserAPIInterface;
 	Router.run(app.getAppComponent(), Router.HistoryLocation, function(Handler, state) {
-		context.executeAction(function(actionContext, payload, done) {
-			done();
-		}, state, function() {
-			React.withContext(context.getComponentContext(), function() {
-				React.render(React.createFactory(Handler)(), document.body);
-			});
+		React.withContext(context.getComponentContext(), function() {
+			React.render(React.createFactory(Handler)(), document.body);
 		});
 	});
 });

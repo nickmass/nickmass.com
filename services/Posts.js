@@ -65,11 +65,18 @@ var Posts = function(db, user) {
 		return Q(db).ninvoke('hgetall', 'post:' + id).then(function(data) {
 			if(!data)
 				throw errors.NotFound;
-
 			return data;
 		});
 	};
-
+	
+	this.getPostByFragment = function(fragment) {
+		return Q(db).ninvoke('get', 'postFragment:' + fragment).then(function(id) {
+			if(!id)
+				throw errors.NotFound;
+			return getPost(id);
+		});
+	},
+	
 	this.createPost = function(post) {
 		if(!user)
 			throw errors.Forbidden;
@@ -78,13 +85,15 @@ var Posts = function(db, user) {
 			title: post.title,
 			content: post.content,
 			date: new Date().getTime(),
-			authorId: user.id
+			authorId: user.id,
+			urlFragment: post.urlFragment
 		};
 		
 		return Q(db).ninvoke('incr', 'nextPostId').then(function(data) {
 			newPost.id = data;
 			return Q.all([Q(db).ninvoke('lpush', 'posts', newPost.id),
-						  Q(db).ninvoke('hmset', 'post:' + newPost.id, newPost)]);
+						  Q(db).ninvoke('hmset', 'post:' + newPost.id, newPost),
+						  Q(db).ninvoke('set', 'postFragment:' + newPost.urlFragment, newPost.id)]);
 		}).then(function(data) {
 			PageCache.clearCache();	
 			return newPost.id;
@@ -102,9 +111,14 @@ var Posts = function(db, user) {
 
 		if(post.content)
 			updatedPost.content = post.content;
+
+		if(post.urlFragment)
+			updatedPost.urlFragment = post.urlFragment;
+
 		return Q(db).ninvoke('hexists', 'post:' + id, 'id').then(function(data) {
 			if(data) {
-				return Q(db).ninvoke('hmset', 'post:' + id, updatedPost).then(function(data) {
+				return Q.all([Q(db).ninvoke('hmset', 'post:' + id, updatedPost),
+							  Q(db).ninvoke('set', 'postFragment:' + updatedPost.urlFragment, id)]).then(function(data) {
 					PageCache.clearCache();	
 					return id;
 				});

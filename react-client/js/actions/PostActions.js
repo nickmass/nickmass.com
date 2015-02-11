@@ -18,7 +18,14 @@ var PostActions = {
 		var state = actionContext.getStore(PostStore).getState();
 		actionContext.executeAction(PostActions.getPostPage, {page: state.currentPage, pageSize: state.pageSize}, done);
 	},
-
+	
+	getPost: function(actionContext, payload, done) {
+		actionContext.PostInterface.getPostByFragment(payload).then(function(post) {
+			actionContext.dispatch('RECIEVE_POST', post);
+			done();
+		});
+	},
+		
 	createOrUpdatePost: function(actionContext, payload, done) {
 		var id = payload.id;
 		if(id) {

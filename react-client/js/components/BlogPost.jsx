@@ -2,6 +2,7 @@ var React = require('react');
 var ReactPropTypes = React.PropTypes;
 var Router = require('react-router');
 var FluxibleMixin = require('fluxible').Mixin;
+var Link = Router.Link;
 
 var PostActions = require('../actions/PostActions');
 
@@ -31,11 +32,17 @@ var BlogPost = React.createClass({
 					</div>
 					);
 		}
+		var title;
+
+		if(post.urlFragment)
+			title = <h6 itemProp="name"><Link to="post" params={{fragment: post.urlFragment}}>{post.title}</Link></h6>
+		else
+			title = <h6 itemProp="name">{post.title}</h6>
 
 		return (
 			<article className="post" itemScope itemType="http://schema.org/BlogPosting">
 				{postEditor}
-				<h6 itemProp="name">{post.title}</h6>
+				{title}
 				<small><span itemProp="author">{post.author}</span> on <span itemProp="datePublished">{post.date}</span></small>
 				<div dangerouslySetInnerHTML={{__html: post.content}} itemProp="articleBody"/>
 				<hr/>

@@ -36,21 +36,27 @@ module.exports = function(db) {
 			callbackURL: redirectUrl 
 		},
 		function(accessToken, refreshToken, profile, done) {
+			console.log('ABC');
 			oauth2Client.setCredentials({
 				access_token: accessToken,
 				refresh_token: refreshToken
 			});
 			plus.people.get({ userId: 'me', auth: oauth2Client }, function(err, res) {
+				console.log('DEF');
 				Users.getSocialUser('google:' + res.id).then(function(user) {
+					console.log('KLM');
 					done(null, user);
 				}, function(err) {
 					Users.createSocialUser('google:' + res.id, { name: res.displayName, email: res.emails[0].value})
 						.then(function(user) {
+							console.log('NOP');
 							done(null, user);
 						}, function(err) {
+							console.log('QRS');
 							done(err, null);
 						});
 				});
+				console.log('HIJ');
 			});
 		})
 	);

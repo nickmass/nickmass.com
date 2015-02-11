@@ -30,7 +30,7 @@ client = client.wrap(handleErrorsInterceptor);
 UserAPIInterface = {
 	getCurrentUser: function () {
 		return client({
-			path: '/auth/current',
+			path: '/api/users/current',
 		}).then(function(data) {
 			return data.entity;
 		});

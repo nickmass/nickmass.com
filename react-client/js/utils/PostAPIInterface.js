@@ -49,6 +49,14 @@ PostAPIInterface = {
 		});
 	},
 
+	getPostByFragment: function(fragment) {
+		return client({
+			path: baseURL + '/posts/' + fragment
+		}).then(function(data) {
+			return data.entity;
+		});
+	},
+
 	createPost: function(post) {
 		return client({
 			path: baseURL + '/posts',

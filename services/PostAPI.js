@@ -1,7 +1,7 @@
 var Q = require('q');
 var Posts = require('./Posts');
 
-module.exports = function(app, express, db) {
+module.exports = function(db) {
 
 	this.getPosts = function(req, res) {
 		Posts(db, req.user).getPosts(req.query.limit, req.query.skip).then(function(result) {
@@ -11,6 +11,12 @@ module.exports = function(app, express, db) {
 
 	this.getPost = function(req, res) {
 		Posts(db, req.user).getPost(req.params.id).then(function(post) {
+			res.send(post);
+		}, errorHandler(res));
+	};
+	
+	this.getPostByFragment = function(req, res) {
+		Posts(db, req.user).getPostByFragment(req.params.fragment).then(function(post) {
 			res.send(post);
 		}, errorHandler(res));
 	};

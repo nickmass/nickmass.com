@@ -64,5 +64,5 @@ gulp.task('default', ['js', 'css', 'html'], function() {
 	gulp.watch('react-client/css/*.css', ['css']);
 	gulp.watch('react-client/*.html', ['html']);
 	gulp.watch(['react-client/**/*.js', 'react-client/**/*.jsx'], ['js']);
-	nodemon({ script: 'server.js', ext: ['js', 'jsx'], ignore: ['node_modules/**/*', 'spec/**/*', 'dist/**/*']});
+	nodemon({ script: 'server.js', ext: 'js jsx', ignore: ['node_modules/**/*', 'spec/**/*', 'dist/**/*']});
 });

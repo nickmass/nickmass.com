@@ -38,7 +38,7 @@ var PostComposer = React.createClass({
 		
 		var title = this.state.new ? 'Create Post' : 'Edit Post';
 		var preview;
-		if(this.state.content.length > 0) {
+		if(this.state.content.length > 0 && this.state.title.length > 0) {
 			preview = (
 					<div id="post-preview" className="post">
 					<h6>{this.state.title}</h6>
@@ -53,6 +53,8 @@ var PostComposer = React.createClass({
 					<div id="post-entry">
 					<label>Title</label>
 					<input className="u-full-width" type="text" value={this.state.title} onChange={this.onChangeTitle}/>
+					<label>Url Fragment</label>
+					<input className="u-full-width" type="text" value={this.state.urlFragment} onChange={this.onChangeUrlFragment} />
 					<label>Content</label>
 					<textarea className="u-full-width" value={this.state.content} onChange={this.onChangeContent}/><br/>
 					<button onClick={this.onCancel}>Cancel</button>
@@ -68,7 +70,11 @@ var PostComposer = React.createClass({
 	},
 
 	onChangeTitle: function(event) {
-		this.setState({title: event.target.value});
+		this.setState({title: event.target.value, urlFragment: PostFormatter.formatURLFragment(event.target.value)});
+	},
+	
+	onChangeUrlFragment: function(event) {
+		this.setState({urlFragment: event.target.value});
 	},
 
 	onChangeContent: function(event) {
