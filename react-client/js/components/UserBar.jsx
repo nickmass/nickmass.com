@@ -24,7 +24,7 @@ var UserBar = React.createClass({
 					<div className="u-pull-right">
 						<span className="user-greeting">Hello, {user.name}</span>
 						<button className="button-primary" onClick={this.onCreatePost}>Create Post</button>
-						<button onClick={this.onLogout}>Logout</button>
+						<a className="button" href="/auth/logout">Logout</a>
 					</div>
 					<div className="u-cf" />
 				</div>
@@ -33,7 +33,7 @@ var UserBar = React.createClass({
 			return (
 				<div id="user-bar" className="u-full-width">
 					<div className="u-pull-right">
-						<button className="button-primary" onClick={this.onLogin}>Login</button>
+						<a className="button button-primary" href="/auth/google">Login</a>
 					</div>
 					<div className="u-cf" />
 				</div>

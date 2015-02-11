@@ -1,4 +1,6 @@
 var React = require('react');
+var Router = require('react-router');
+var Link = Router.Link;
 
 var Header = React.createClass({
 	componentDidMount: function() {
@@ -13,7 +15,7 @@ var Header = React.createClass({
 		return (
 				<div id="header">
 				<canvas id="header-canvas" />
-				<h1><a href="http://nickmass.com">NickMass.com</a></h1>
+				<h1><Link to="/">NickMass.com</Link></h1>
 				<h4>Some short subtitle</h4>
 				<div className="social-container">
 				<ul className="social-links">

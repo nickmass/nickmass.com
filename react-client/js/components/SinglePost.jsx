@@ -17,24 +17,28 @@ var SinglePost = React.createClass({
 	},
 
 	getInitialState: function() {
-		return this.getStore(PostStore).getState().post;
-	},
-
-	render: function() {
+		var post = this.getStore(PostStore).getState().post;
 		var fragment = this.getParams().fragment;
-		
-		if(!this.state.id)
+		if(post.urlFragment != fragment)
 			this.executeAction(PostActions.getPost, fragment);
-
+		return post; 
+	},
+	
+	render: function() {
 		return (
 				<div className="container">
-					<BlogPost key={this.state.id} post={this.state} />
+					<BlogPost post={this.state} />
 				</div>
 			   );
 	},
-
+	
 	onChange: function() {
-		this.setState(this.getStore(PostStore).getState().post);
+		var post = this.getStore(PostStore).getState().post;
+		var fragment = this.getParams().fragment;
+		if(post.urlFragment != fragment)
+			this.replaceWith('post', {fragment: post.urlFragment});
+
+		this.setState(post);
 	}
 });
 

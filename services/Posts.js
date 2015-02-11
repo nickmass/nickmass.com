@@ -65,7 +65,13 @@ var Posts = function(db, user) {
 		return Q(db).ninvoke('hgetall', 'post:' + id).then(function(data) {
 			if(!data)
 				throw errors.NotFound;
-			return data;
+			
+			return Q.all([Q(data), Users.getUser(data.authorId)]);
+		}).spread(function(post, author) {
+			post.author = author.name;
+			post.authorEmail = author.email;
+
+			return post;
 		});
 	};
 	
