@@ -40,10 +40,8 @@ var Posts = function(db, user) {
 						return author.id === post.authorId;
 					});
 
-					if(match[0]) {
+					if(match[0])
 						post.author = match[0].name;
-						post.authorEmail = match[0].email;
-					}
 				
 					return post;
 				});
@@ -68,8 +66,9 @@ var Posts = function(db, user) {
 			
 			return Q.all([Q(data), Users.getUser(data.authorId)]);
 		}).spread(function(post, author) {
-			post.author = author.name;
-			post.authorEmail = author.email;
+			if(author) {
+				post.author = author.name;
+			}
 
 			return post;
 		});
