@@ -126,7 +126,7 @@ var Posts = function(db, user) {
 			if(data) {
 				return Q.all([Q(db).ninvoke('hmset', 'post:' + id, updatedPost),
 							  Q(db).ninvoke('set', 'postFragment:' + updatedPost.urlFragment, id)]).then(function(data) {
-					return Q(db).ninoke('bgsave');
+					return Q(db).ninvoke('bgsave');
 				}).then(function() {
 					PageCache.clearCache();
 					return id;
