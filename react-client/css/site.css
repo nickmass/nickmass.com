@@ -15,7 +15,7 @@ code,kbd,pre,samp {
 	border-bottom: 1px solid #e1e1e1;
 }
 
-#user-bar button {
+#user-bar button, .button {
 	margin: 8px;
 }
 

@@ -100,6 +100,8 @@ var Posts = function(db, user) {
 						  Q(db).ninvoke('hmset', 'post:' + newPost.id, newPost),
 						  Q(db).ninvoke('set', 'postFragment:' + newPost.urlFragment, newPost.id)]);
 		}).then(function(data) {
+			return Q.all([Q(data), Q(db).ninvoke('bgsave')]);
+		}).spread(function(data) {
 			PageCache.clearCache();	
 			return newPost.id;
 		});
@@ -124,7 +126,9 @@ var Posts = function(db, user) {
 			if(data) {
 				return Q.all([Q(db).ninvoke('hmset', 'post:' + id, updatedPost),
 							  Q(db).ninvoke('set', 'postFragment:' + updatedPost.urlFragment, id)]).then(function(data) {
-					PageCache.clearCache();	
+					return Q(db).ninoke('bgsave');
+				}).then(function() {
+					PageCache.clearCache();
 					return id;
 				});
 			} else {
@@ -145,6 +149,8 @@ var Posts = function(db, user) {
 				throw errors.NotFound;
 
 			return Q(db).ninvoke('lrem', 'posts', -1, id);
+		}).then(function() {
+			return Q(db).ninvoke('bgsave');
 		}).then(function() {
 			PageCache.clearCache();	
 			return;
