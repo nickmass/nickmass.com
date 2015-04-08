@@ -8,7 +8,7 @@ var PostFormatter = {
 	
 	formatDate: function(date) {
 		var d = new Date(Number(date) || 0);
-		return d.toLocaleDateString('en-US', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'});
+		return d.toLocaleDateString('en-US', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'America/Denver'});
 	},
 	
 	formatURLFragment: function(title) {
