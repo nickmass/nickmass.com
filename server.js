@@ -14,7 +14,7 @@ var staticCache = require('express-static-cache');
 var services = {
 	PostAPI : require('./services/PostAPI')(db),
 	UserAPI : require('./services/UserAPI')(),
-	Authentication: require('./services/Authentication')(db),
+	Authentication: require('./services/Authentication')(db, config),
 	ServerRender: require('./services/ServerRender')(db)
 };
 

@@ -3,5 +3,6 @@ module.exports = {
 	database: {
 		port: 6379
 	},
-	noCache: true 
+	noCache: true,
+	allowSignUps: false
 };

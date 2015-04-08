@@ -7,7 +7,7 @@ var OAuth2 = google.auth.OAuth2;
 var baseURL = require('../config').baseURL;
 var redirectUrl = baseURL + '/auth/google/return';
 
-module.exports = function(db) {
+module.exports = function(db, config) {
 	var Users = require('./Users')(db);
 	var oauth2Client = new OAuth2(keys.GoogleOAuth2ClientID, keys.GoogleOAuth2ClientSecret, redirectUrl);
 
@@ -44,12 +44,16 @@ module.exports = function(db) {
 				Users.getSocialUser('google:' + res.id).then(function(user) {
 					done(null, user);
 				}, function(err) {
-					Users.createSocialUser('google:' + res.id, { name: res.displayName, email: res.emails[0].value})
-						.then(function(user) {
-							done(null, user);
-						}, function(err) {
-							done(err, null);
-						});
+					if(!config.allowSignUps) {
+						done(err, null);
+					} else {
+						Users.createSocialUser('google:' + res.id, { name: res.displayName, email: res.emails[0].value})
+							.then(function(user) {
+								done(null, user);
+							}, function(err) {
+								done(err, null);
+							});
+					}
 				});
 			});
 		})
