@@ -30,6 +30,8 @@ var UserBar = React.createClass({
 				</div>
 				   );
 		} else {
+			//Hide signup bar
+			return (<span></span>);
 			return (
 				<div id="user-bar" className="u-full-width">
 					<div className="u-pull-right">
