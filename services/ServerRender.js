@@ -45,6 +45,8 @@ ServerRender = function(db) {
 								markup: React.renderToString(React.createFactory(Handler)())
 							}));
 
+							html = '<!DOCTYPE html>' + html;
+
 							if(notFound)
 								res.status(404);
 
