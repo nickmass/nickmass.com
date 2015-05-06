@@ -12,6 +12,7 @@ var minifyCSS = require('gulp-minify-css');
 var minifyHTML = require('gulp-minify-html');
 var concat = require('gulp-concat');
 var del = require('del');
+var s3 = require('s3');
 
 var bundler = browserify({
 	entries: ['./react-client/js/client.js'],
@@ -58,6 +59,38 @@ gulp.task('clean', function(cb) {
 });
 
 gulp.task('build', ['js', 'css', 'html'], function() {
+});
+
+gulp.task('deploy', ['build'], function() {
+	var keys = require('./keys');
+	
+	var client = s3.createClient({
+		s3Options: {
+			accessKeyId: keys.S3AccessKey,
+			secretAccessKey: keys.S3SecretKey,
+			region: 'us-west-2'
+		}
+	});
+
+	var params = {
+		localDir: 'dist/',
+		deleteRemoved: true,
+		s3Params: {
+			Bucket: 'files.nickmass.com',
+			Prefix: 'static-files/'
+		}
+	};
+
+	var uploader = client.uploadDir(params);
+
+	uploader.on('error', function(err) {
+		console.log('Unable to upload: ', err.stack);
+		console.log(err);
+	});
+
+	uploader.on('end', function() {
+		console.log('Upload Complete');
+	});
 });
 
 gulp.task('default', ['js', 'css', 'html'], function() {

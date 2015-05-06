@@ -44,7 +44,8 @@
     "reactify": "~1.0.0",
     "vinyl-buffer": "~1.0.0",
     "vinyl-source-stream": "~1.0.0",
-    "watchify": "~2.2.1"
+    "watchify": "~2.2.1",
+    "s3": "~4.4.0"
   },
   "author": "Nick Massey <nickmass@nickmass.com> (http://nickmass.com)",
   "license": "MIT"
